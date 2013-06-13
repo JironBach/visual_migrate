@@ -1,0 +1,11 @@
+<h3>Tables</h3>
+<% if !(@tables.nil? || @tables.blank?) %>
+  <ul>
+    <%= @tables.inspect %>
+    <% @tables.each do |t| %>
+     <li><%= link_to t, :action => :select_table, :id => t %></li>
+    <% end %>
+  </ul>
+<% else %>
+  tables not found.<br />
+<% end %>

@@ -1,0 +1,125 @@
+app\:about=List versions of all Rails frameworks and the environment
+app\:assets\:clean=Remove compiled assets
+app\:assets\:clean\:all=
+app\:assets\:environment=
+app\:assets\:precompile=Compile all the assets named in config.assets.precompile
+app\:assets\:precompile\:all=
+app\:assets\:precompile\:nondigest=
+app\:assets\:precompile\:primary=
+app\:db\:abort_if_pending_migrations=
+app\:db\:charset=
+app\:db\:collation=
+app\:db\:create=Create the database from config/database.yml for the current Rails.env (use db:create:all to create all dbs in the config)
+app\:db\:create\:all=
+app\:db\:drop=Drops the database for the current Rails.env (use db:drop:all to drop all databases)
+app\:db\:drop\:all=
+app\:db\:fixtures\:identify=
+app\:db\:fixtures\:load=Load fixtures into the current environment's database.  Load specific fixtures using FIXTURES=x,y. Load from subdirectory in test/fixtures using FIXTURES_DIR=z. Specify an alternative path (eg. spec/fixtures) using FIXTURES_PATH=spec/fixtures.
+app\:db\:forward=
+app\:db\:load_config=
+app\:db\:migrate=Migrate the database (options: VERSION=x, VERBOSE=false).
+app\:db\:migrate\:down=
+app\:db\:migrate\:redo=
+app\:db\:migrate\:reset=
+app\:db\:migrate\:status=Display status of migrations
+app\:db\:migrate\:up=
+app\:db\:reset=
+app\:db\:rollback=Rolls the schema back to the previous version (specify steps w/ STEP=n).
+app\:db\:schema\:dump=Create a db/schema.rb file that can be portably used against any DB supported by AR
+app\:db\:schema\:load=Load a schema.rb file into the database
+app\:db\:seed=Load the seed data from db/seeds.rb
+app\:db\:sessions\:clear=
+app\:db\:sessions\:create=
+app\:db\:setup=Create the database, load the schema, and initialize with the seed data (use db:reset to also drop the db first)
+app\:db\:structure\:dump=Dump the database structure to an SQL file
+app\:db\:test\:clone=
+app\:db\:test\:clone_structure=
+app\:db\:test\:load=
+app\:db\:test\:prepare=
+app\:db\:test\:purge=
+app\:db\:version=Retrieves the current schema version number
+app\:default=
+app\:doc\:app=Generate docs for the app -- also available doc:rails, doc:guides, doc:plugins (options: TEMPLATE=/rdoc-template.rb, TITLE="Custom Title")
+app\:doc\:clobber=
+app\:doc\:clobber_app=
+app\:doc\:clobber_plugins=
+app\:doc\:clobber_rails=
+app\:doc\:guides=
+app\:doc\:plugins=
+app\:doc\:rails=
+app\:doc\:reapp=
+app\:doc\:rerails=
+app\:environment=
+app\:log\:clear=Truncates all *.log files in log/ to zero bytes
+app\:middleware=Prints out your Rack middleware stack
+app\:notes=Enumerate all annotations (use notes:optimize, :fixme, :todo for focus)
+app\:notes\:custom=Enumerate a custom annotation, specify with ANNOTATION=CUSTOM
+app\:notes\:fixme=
+app\:notes\:optimize=
+app\:notes\:todo=
+app\:rails\:template=Applies the template supplied by LOCATION=(/path/to/template) or URL
+app\:rails\:templates\:copy=
+app\:rails\:update=Update configs and some other initially generated files (or use just update:configs, update:scripts, or update:application_controller)
+app\:rails\:update\:application_controller=
+app\:rails\:update\:configs=
+app\:rails\:update\:scripts=
+app\:rails_env=
+app\:railties\:install\:migrations=
+app\:routes=Print out all defined routes in match order, with names. Target specific controller with CONTROLLER=x.
+app\:secret=Generate a cryptographically secure secret key (this is typically used to generate a secret for cookie sessions).
+app\:stats=Report code statistics (KLOCs, etc) from the application
+app\:test=Runs test:units, test:functionals, test:integration together (also available: test:benchmark, test:profile, test:plugins)
+app\:test\:benchmark=
+app\:test\:functionals=
+app\:test\:integration=
+app\:test\:plugins=
+app\:test\:prepare=
+app\:test\:profile=
+app\:test\:recent=Run tests for {:recent=>"test:prepare"} / Test recent changes
+app\:test\:single=Run tests for {:single=>"test:prepare"}
+app\:test\:uncommitted=Run tests for {:uncommitted=>"test:prepare"} / Test changes since last checkin (only Subversion and Git)
+app\:test\:units=
+app\:time\:zones\:all=Displays all time zones, also available: time:zones:us, time:zones:local -- filter with OFFSET parameter, e.g., OFFSET=-6
+app\:time\:zones\:local=
+app\:time\:zones\:us=
+app\:tmp\:cache\:clear=
+app\:tmp\:clear=Clear session, cache, and socket files from tmp/ (narrow w/ tmp:sessions:clear, tmp:cache:clear, tmp:sockets:clear)
+app\:tmp\:create=Creates tmp directories for sessions, cache, sockets, and pids
+app\:tmp\:pids\:clear=
+app\:tmp\:sessions\:clear=
+app\:tmp\:sockets\:clear=
+build=Build visual-migrate-0.0.1.gem into the pkg directory.
+clobber=
+clobber_rdoc=Remove RDoc HTML files
+db\:create=Create the database from config/database.yml for the current Rails.env (use db:create:all to create all dbs in the config)
+db\:create\:all=
+db\:drop=Drops the database for the current Rails.env (use db:drop:all to drop all databases)
+db\:drop\:all=
+db\:fixtures\:load=Load fixtures into the current environment's database.
+db\:migrate=Migrate the database (options: VERSION=x, VERBOSE=false).
+db\:migrate\:down=
+db\:migrate\:redo=
+db\:migrate\:reset=
+db\:migrate\:status=Display status of migrations
+db\:migrate\:up=
+db\:reset=
+db\:rollback=Rolls the schema back to the previous version (specify steps w/ STEP=n).
+db\:schema\:dump=Create a db/schema.rb file that can be portably used against any DB supported by AR
+db\:schema\:load=Load a schema.rb file into the database
+db\:seed=Load the seed data from db/seeds.rb
+db\:setup=Create the database, load the schema, and initialize with the seed data (use db:reset to also drop the db first)
+db\:structure\:dump=Dump the database structure to an SQL file
+db\:version=Retrieves the current schema version number
+default=
+doc=
+doc/api=
+doc/api/index.html=
+doc/app=
+doc/app/index.html=
+install=Build and install visual-migrate-0.0.1.gem into system gems.
+load_app=
+rdoc=Build RDoc HTML files
+rdoc/index.html=
+release=Create tag v0.0.1 and build and push visual-migrate-0.0.1.gem to Rubygems
+rerdoc=Rebuild RDoc HTML files
+test=Run tests
