@@ -4,7 +4,7 @@
 require 'ripper'
 
 class VisualMigrateRipper < Ripper::Filter
-  attr_reader :def_strings, :vm_class
+  attr_reader :migrate_strings
   DefNames = Array.new(['change', 'up', 'down'])
   MethodNames = Array.new([
       'create_table',
@@ -23,13 +23,22 @@ class VisualMigrateRipper < Ripper::Filter
     super src
     
     @module = Module.new
-    @def_strings = Hash.new ''
+    @migrate_strings = Hash.new Hash.new
+  end
+  
+  def add_migrate_str(str)
+    if !@method_name.nil?
+      @migrate_strings[@def_name][@method_name] += str
+    elsif !@def_name.nil?
+      if @migrate_strings[@def_name].is_a?(Hash)
+        @migrate_strings[@def_name] = ''
+      end
+      @migrate_strings[@def_name] += str
+    end
   end
   
   def on_default(event, tok, f)
-    if !@def_name.nil?
-      @def_strings[@def_name] += tok
-    end
+    add_migrate_str tok
   end
 
   def on_kw(tok, f)
@@ -40,38 +49,36 @@ class VisualMigrateRipper < Ripper::Filter
     elsif tok == 'end'
       if @is_do
         @is_do = false
-        if !@def_name.nil?
-          @def_strings[@def_name] += tok
-        end
+        add_migrate_str tok
       elsif @is_def
         @is_def = false
         @def_name = nil
       end
+    else
+      add_migrate_str tok
     end
-  end
+   end
 
   def on_ident(tok, f)
     if @def_name.nil? && DefNames.include?(tok)
       @def_name = tok
     else
       if !@def_name.nil?
-        @def_strings[@def_name] += tok
+        @migrate_strings[@def_name] += tok
       end
     end
   end
   
   def on_const(tok, f)
     if @is_ancestors
-      @super_name = tok#+= '::' + tok
+      @super_name += '::' + tok
     elsif @is_super
       @super_name = tok
     elsif @is_class
       @class_name = tok
     end
 
-    if !@def_name.nil?
-      @def_strings[@def_name] += tok
-    end
+    add_migrate_str tok
   end
   
   def on_op(tok, f)
@@ -81,31 +88,22 @@ class VisualMigrateRipper < Ripper::Filter
       @is_ancestors = true
     end
 
-    if !@def_name.nil?
-      @def_strings[@def_name] += tok
-    end
+    add_migrate_str tok
   end
   
   def on_nl(tok, f)
     if !@is_def && @is_class
-      @vm_class = @module.const_set(@class_name, Class.new(@module.const_set(@super_name, Class.new)))
-      #@vm_class = @module.const_set(@class_name, Class.new)
-      
       @is_ancestors = false
       @is_super = false
       @is_class = false
     end
 
-    if !@def_name.nil?
-      @def_strings[@def_name] += "\n"
-    end
+    add_migrate_str tok
   end
   
   def on_do_block(tok, f)
     @is_do = true
 
-    if !@def_name.nil?
-      @def_strings[@def_name] += tok
-    end
+    add_migrate_str tok
   end
 end

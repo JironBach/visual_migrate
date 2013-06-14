@@ -46,7 +46,7 @@ module VisualMigrate
         vm_ripper = VisualMigrateRipper.new migration_content
         #vm_ripper = Ripper.lex(migration_content)
         vm_ripper.parse
-        @migration_content = vm_ripper.def_strings#VisualMigrateRipper::PARSER_EVENTS
+        @migration_content = vm_ripper.migrate_strings#VisualMigrateRipper::PARSER_EVENTS
       end
       
       render :edit_migrations
