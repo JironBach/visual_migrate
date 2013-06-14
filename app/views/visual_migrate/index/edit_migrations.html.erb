@@ -1,1 +1,14 @@
-<%= @migration_contents.nil? ? 'select migration file.' : @migration_contents %>
+<% if @migration_content.nil? %>
+  select migration file.
+<% else %>
+  <%= @migration_content %><br /><br />
+  <% linezero = true %>
+  <% @migration_content.each do |mc| %>
+    <font color="blue"><b><%= mc[0] %></b></font>
+    <%  is_first = true %>
+    <% mc.each do |line| %>
+      <%= raw nl2br line if line.is_a?(String) if !is_first %>
+      <% is_first = false %>
+    <% end %>
+  <% end %>
+<% end %>

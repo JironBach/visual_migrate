@@ -109,6 +109,7 @@ DEPENDENCIES
   file-tail
   jquery-rails
   mysql2
+  ruby2ruby
   ruby_parser
   sourcify
   visual-migrate!
