@@ -1,0 +1,24 @@
+<table border="0" style="margin-left:4em;">
+  <tr>
+    <th width="100em">FuncName</th>
+    <td width='100em'>create_table</td>
+    <td><%= check_box_tag :func_delete, true, false %>delete　</td>
+  </tr>
+</table>
+<table border="0" style="margin-left:6em;">
+  <tr>
+    <th>create pk</th>
+    <th>pk name</th>
+    <th>options</th>
+    <th>temporary</th>
+    <th>force</th>
+  </tr>
+  <tr>
+    <td><%= check_box_tag :create_id, true, @func.options.id %></td>
+    <td><%= text_field_tag :create_primary_key, @func.options.primary_key %></td>
+    <td><%= text_field_tag :create_options, @func.options.options %></td>
+    <td><%= check_box_tag :create_temporary, true, @func.options.temporary %></td>
+    <td><%= check_box_tag :create_force, true, @func.options.force %></td>
+  </tr>
+</table>
+<%= show_columns @func.columns %>

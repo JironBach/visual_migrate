@@ -1,84 +1,70 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
+# -*- coding: utf-8 -*-
 
 require 'ripper'
+require 'migrate_defs'
 
 class VisualMigrateRipper < Ripper::Filter
-  attr_reader :migrate_strings
-  DefNames = Array.new(['change', 'up', 'down'])
-  MethodNames = Array.new([
-      'create_table',
-      'drop_table',
-      'change_table',
-      'rename_table',
-      'add_column',
-      'rename_column',
-      'change_column',
-      'remove_column',
-      'add_index',
-      'remove_index',
-  ])
+  attr_reader :class_name, :parent_name, :method_classes
   
   def initialize(src)
     super src
     
-    @module = Module.new
-    @migrate_strings = Hash.new Hash.new
-  end
-  
-  def add_migrate_str(str)
-    if !@method_name.nil?
-      @migrate_strings[@def_name][@method_name] += str
-    elsif !@def_name.nil?
-      if @migrate_strings[@def_name].is_a?(Hash)
-        @migrate_strings[@def_name] = ''
-      end
-      @migrate_strings[@def_name] += str
-    end
-  end
-  
-  def on_default(event, tok, f)
-    add_migrate_str tok
+    @method_classes = Array.new
+    @is_class = false
+    @is_method = false
+    @is_func = false
+    @is_do = false
   end
 
   def on_kw(tok, f)
     if tok == 'class'
       @is_class = true
-    elsif !@vm_class.nil? && tok == 'def'
-      @is_def = true
+    elsif tok == 'def'
+      @is_method = true
     elsif tok == 'end'
       if @is_do
         @is_do = false
-        add_migrate_str tok
-      elsif @is_def
-        @is_def = false
-        @def_name = nil
+      elsif @is_func
+        @is_func = false
+      elsif @is_method
+        @is_method = false
       end
-    else
-      add_migrate_str tok
     end
-   end
+  end
 
   def on_ident(tok, f)
-    if @def_name.nil? && DefNames.include?(tok)
-      @def_name = tok
-    else
-      if !@def_name.nil?
-        @migrate_strings[@def_name] += tok
+    return if tok == 't'
+ 
+    if @is_func
+      if !@func_type.nil?
+        @func_class = @method_class.add_func(@func_type, tok)
+        @func_type = nil
+      elsif tok == 'timestamps'
+        @func_class.add_column(tok)
+      elsif MigrateDefs::ColumnType::Description.has_key?(tok)
+        @column_type = tok
+        @is_column = true
+      elsif @is_column
+        @func_class.add_column(@column_type, tok)
       end
+    elsif @method_name.nil? && MigrateDefs::FuncNames.include?(tok)
+      @func_type = tok
+      @is_func = true
+    elsif @def_name.nil? && MigrateDefs::MethodNames.include?(tok)
+      @def_name = tok
+      @method_class = MigrateDefs::MigrateMethod.new(tok)
+      @method_classes << @method_class
     end
   end
   
   def on_const(tok, f)
     if @is_ancestors
-      @super_name += '::' + tok
+      @parent_name += '::' + tok
     elsif @is_super
-      @super_name = tok
+      @parent_name = tok
     elsif @is_class
       @class_name = tok
     end
-
-    add_migrate_str tok
   end
   
   def on_op(tok, f)
@@ -87,23 +73,27 @@ class VisualMigrateRipper < Ripper::Filter
     elsif @is_super && tok == '::'
       @is_ancestors = true
     end
-
-    add_migrate_str tok
   end
   
   def on_nl(tok, f)
-    if !@is_def && @is_class
+    if @is_class
       @is_ancestors = false
       @is_super = false
       @is_class = false
     end
-
-    add_migrate_str tok
   end
   
   def on_do_block(tok, f)
     @is_do = true
-
-    add_migrate_str tok
+  end
+  
+  def get_str
+    result = 'class ' + @class_name
+    result += ' < ' + @parent_name + "\n" if !@parent_name.nil?
+    @method_classes.each do |mc|
+      result += mc.get_str
+    end
+    result += "end"
+    result
   end
 end

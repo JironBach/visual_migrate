@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 require_dependency "visual_migrate/application_controller"
 
 require 'pathname'
 require 'visual_migrate_ripper'
+require 'migrate_defs'
 
 module VisualMigrate
   class IndexController < ApplicationController
@@ -36,17 +39,18 @@ module VisualMigrate
         open(migration_filename, 'r') do |f|
           migration_content = f.read
         end
-=begin
-        parsed_migration = RubyParser.new.parse(migration_content)
-        @migration_content = Ruby2Ruby.new.process(parsed_migration)
-        #open('/tmp/vm.txt', 'w') do |f|
-        #  f.write(@migration_content)
-        #end
-=end        
+
+        @migration_content = Ripper.lex(migration_content)
         vm_ripper = VisualMigrateRipper.new migration_content
-        #vm_ripper = Ripper.lex(migration_content)
         vm_ripper.parse
-        @migration_content = vm_ripper.migrate_strings#VisualMigrateRipper::PARSER_EVENTS
+        @context = vm_ripper.get_str
+        @vm_ripper = vm_ripper
+
+        #parsed_migration = RubyParser.new.parse(@context)
+        #@context = Ruby2Ruby.new.process(parsed_migration)
+        #open('/tmp/vm.txt', 'w') do |f|
+        #  f.write(@context)
+        #end
       end
       
       render :edit_migrations

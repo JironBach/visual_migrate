@@ -1,14 +1,28 @@
+<%= form_tag 'save_migration' do %>
+  <table border="0">
+    <tr>
+      <th width="100em">ClassName</th>
+      <td><%= text_field_tag :create_table_class_name, @vm_ripper.class_name %></td>
+      <th width="100em">Parerent</th>
+      <td><%= text_field_tag :create_table_class_name, @vm_ripper.parent_name, :size => '40em' %></td>
+    </tr>
+  </table>
+  <% mc_check = Array.new %>
+  <% @vm_ripper.method_classes.each do |mc| %>
+    <%= show_method mc %>
+    <% mc_check << mc.name %>
+  <% end %>
+  <% MigrateDefs::MethodNames.each do |mn| %>
+    <%= show_disabled_method MigrateDefs::MigrateMethod.new mn if !mc_check.include?(mn) %>
+  <% end %>
+<% end %>
+
+<!--
+<br /><br />
 <% if @migration_content.nil? %>
   select migration file.
 <% else %>
   <%= @migration_content %><br /><br />
-  <% linezero = true %>
-  <% @migration_content.each do |mc| %>
-    <font color="blue"><b><%= mc[0] %></b></font>
-    <%  is_first = true %>
-    <% mc.each do |line| %>
-      <%= raw nl2br line if line.is_a?(String) if !is_first %>
-      <% is_first = false %>
-    <% end %>
-  <% end %>
+  <%= raw nl2br @context if !@context.nil? %><br /><br />
 <% end %>
+--->

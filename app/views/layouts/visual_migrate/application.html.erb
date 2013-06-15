@@ -11,11 +11,10 @@
   <!--[if lt IE 7]>
   <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
   <![endif]-->
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= stylesheet_link_tag    "common", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag    "vm-application", :media => "all" %>
+  <%= stylesheet_link_tag    "vm-common", :media => "all" %>
+  <%= javascript_include_tag "vm-application" %>
   <%= javascript_include_tag "jquery" %>
-  <%= javascript_include_tag "common" %>
   <%= csrf_meta_tags %>
 </head>
 
@@ -24,10 +23,10 @@
    <div id="header">
      <table cellpadding="0" cellspacing="0">
        <tr>
-         <td>
+         <td width="250px">
           <h1><a href="/visual-migrate/">VisualMigrate</a></h1>
          </td>
-         <td width="100%">
+         <td width="650px">
           <div id="menu">
             <ul>
               <li><%= link_to "Create Model", :action => :create_model %></li>
@@ -44,11 +43,6 @@
       <a href="index.html">ホーム</a> &raquo; カテゴリ &raquo; ページ
    </div-->
    <div id="contents">
-      <div id="main">
-        <p>
-          <%= yield %>
-        </p>
-      <!-- /#main --></div>
       <div id="sub">
          <div class="section">
            <% if @section_category == :migrations %>
@@ -59,6 +53,11 @@
          <!-- /.section --></div>
       <!-- /#sub --></div>
    <!-- /#contents --></div>
+      <div id="main">
+        <p>
+          <%= yield %>
+        </p>
+      <!-- /#main --></div>
    <div id="footer">
       <div class="copyright">Copyright &copy; 2013 VisualMigrate project.</div>
    <!-- /#footer --></div>

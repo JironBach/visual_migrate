@@ -1,0 +1,80 @@
+<table id='columns' border="0" style="margin-left:8em;">
+  <tr>
+    <th>delete</th>
+    <th>Type</th>
+    <th>Name</th>
+    <% MigrateDefs::ColumnOption::Description.each_key do |key| %>
+      <th><%= key %></th>
+    <% end %>
+  </tr>
+  <% @columns.each do |col| %>
+    <tr>
+      <td><%= check_box_tag :delete, true, false %></td>
+      <td><%= column_select :type, col.type %></td>
+      <td><%= text_field_tag :name, col.name %></td>
+      <td><%= text_field_tag :limit, col.option.limit %></td>
+      <td><%= text_field_tag :default, col.option.default %></td>
+      <td><%= check_box_tag :null, true, col.option.null %></td>
+      <td><%= text_field_tag :precision, col.option.precision %></td>
+      <td><%= text_field_tag :scale, col.option.scale %></td>
+    </tr>
+  <% end %>
+</table>
+　　　　　　<%= button_to_function :add_column, "addColumn('columns');" %><br />
+　　　　　　<%= button_to_function :delete_column, "deleteColumn('columns');" %>
+
+<script type="text/javascript">
+  function addColumn(tableID) {
+      var table = document.getElementById(tableID);
+
+      var rowCount = table.rows.length;
+      var row = table.insertRow(rowCount);
+
+      var cell1 = row.insertCell(0);
+      var element1 = document.createElement("input");
+      element1.type = "checkbox";
+      element1.name="delete[]";
+      cell1.appendChild(element1);
+
+      var cell2 = row.insertCell(1);
+      cell2.innerHTML = '<%= raw column_select(:type, "string").gsub(/\n/, " ") %>';
+
+      var cell3 = row.insertCell(2);
+      var element3 = document.createElement("input");
+      element3.type = "text";
+      element3.name = "name[]";
+      cell3.appendChild(element3);
+
+      var cell4 = row.insertCell(3);
+      var element4 = document.createElement("input");
+      element4.type = "text";
+      element4.name = "limit[]";
+      cell4.appendChild(element4);
+
+      var cell5 = row.insertCell(4);
+      var element5 = document.createElement("input");
+      element5.type = "text";
+      element5.name = "default[]";
+      cell5.appendChild(element5);
+
+      var cell6 = row.insertCell(5);
+      var element6 = document.createElement("input");
+      element6.type = "checkbox";
+      element6.name="null[]";
+      element6.checked=true;
+      cell6.appendChild(element6);
+
+      var cell7 = row.insertCell(6);
+      var element7 = document.createElement("input");
+      element7.type = "text";
+      element7.name = "precision[]";
+      cell7.appendChild(element7);
+
+      var cell8 = row.insertCell(7);
+      var element8 = document.createElement("input");
+      element8.type = "text";
+      element8.name = "scale[]";
+      cell8.appendChild(element8);
+
+  }
+</script>
