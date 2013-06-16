@@ -3,29 +3,56 @@
     <th>delete</th>
     <th>Type</th>
     <th>Name</th>
-    <% MigrateDefs::ColumnOption::Description.each_key do |key| %>
+    <% MigrationDefs::ColumnOption::Description.each_key do |key| %>
       <th><%= key %></th>
     <% end %>
   </tr>
   <% @columns.each do |col| %>
     <tr>
-      <td><%= check_box_tag :delete, true, false %></td>
-      <td><%= column_select :type, col.type %></td>
-      <td><%= text_field_tag :name, col.name %></td>
-      <td><%= text_field_tag :limit, col.option.limit %></td>
-      <td><%= text_field_tag :default, col.option.default %></td>
-      <td><%= check_box_tag :null, true, col.option.null %></td>
-      <td><%= text_field_tag :precision, col.option.precision %></td>
-      <td><%= text_field_tag :scale, col.option.scale %></td>
+      <td><%= check_box_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
+      <td><%= column_select 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][type]', col.type %></td>
+      <td><%= text_field_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][name]', col.name, :readonly => true %></td>
+      <td><%= text_field_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][limit]', col.option.limit %></td>
+      <td><%= text_field_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][default]', col.option.default %></td>
+      <td><%= check_box_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][null]', true, col.option.null %></td>
+      <td><%= text_field_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][precision]', col.option.precision %></td>
+      <td><%= text_field_tag 'create_table[' + @migration_func.name + '][' + (col.name.blank? ? 'timestamps' :col.name) + '][scale]', col.option.scale %></td>
     </tr>
   <% end %>
 </table>
-　　　　　　<%= button_to_function :add_column, "addColumn('columns');" %><br />
 　　　　　　<%= button_to_function :delete_column, "deleteColumn('columns');" %>
+<br />
+　　　　　　<%= button_to_function :add_column, "addColumn('columns');" %>
+  <table id='new_column' border="0" style="margin-left:8em;">
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+      <% MigrationDefs::ColumnOption::Description.each_key do |key| %>
+        <th><%= key %></th>
+      <% end %>
+    </tr>
+    <tr>
+      <td><%= column_select 'new_type', '' %></td>
+      <td><%= text_field_tag 'new_name' %></td>
+      <td><%= text_field_tag 'new_limit' %></td>
+      <td><%= text_field_tag 'new_default', '""' %></td>
+      <td><%= check_box_tag 'new_null', true %></td>
+      <td><%= text_field_tag 'new_precision' %></td>
+      <td><%= text_field_tag 'new_scale' %></td>
+    </tr>
+  </table>
 
 <script type="text/javascript">
   function addColumn(tableID) {
+      if((document.getElementById("new_type").value != "timestamps") && (document.getElementById("new_name").value == "")) {
+        alert("Input ColumnName");
+        return;
+      }
+
+      var column_name = document.getElementById("new_name").value
+      
       var table = document.getElementById(tableID);
+      var newTable = document.getElementById("new_column");
 
       var rowCount = table.rows.length;
       var row = table.insertRow(rowCount);
@@ -33,47 +60,68 @@
       var cell1 = row.insertCell(0);
       var element1 = document.createElement("input");
       element1.type = "checkbox";
-      element1.name="delete[]";
+      element1.name = "create_table[<%= @migration_func.name %>][" + column_name + "][delete]";
       cell1.appendChild(element1);
 
       var cell2 = row.insertCell(1);
-      cell2.innerHTML = '<%= raw column_select(:type, "string").gsub(/\n/, " ") %>';
+      var element2 = document.createElement("select");
+      element2.name = "create_table[<%= @migration_func.name %>][" + column_name + "][type]";
+      <% keys = MigrationDefs::ColumnType.keys.reverse#Why??? %>
+      var i = <%= keys.count-1 %>;
+      var selectedIndex = 0;
+      <% keys.each do |ct| %>
+        var option_<%= ct %>  = document.createElement("option");
+        option_<%= ct %>.text = "<%= ct %>";
+        option_<%= ct %>.value = "<%= ct %>";
+        element2.options.add(option_<%= ct %>, "<%= ct %>");
+        if("<%= ct %>" == document.getElementById("new_type").value) selectedIndex = i;
+        i--;
+      <% end %>
+      element2.options.selectedIndex = selectedIndex;
+      cell2.appendChild(element2);
 
       var cell3 = row.insertCell(2);
       var element3 = document.createElement("input");
       element3.type = "text";
-      element3.name = "name[]";
+      element3.name = "create_table[<%= @migration_func.name %>][" + column_name + "][name]";
+      element3.value = document.getElementById("new_name").value;
+      element3.readOnly = true;
       cell3.appendChild(element3);
+      document.getElementById("new_name").value = "";
 
       var cell4 = row.insertCell(3);
       var element4 = document.createElement("input");
       element4.type = "text";
-      element4.name = "limit[]";
+      element4.name = "create_table[<%= @migration_func.name %>][" + column_name + "][limit]";
+      element4.value = document.getElementById("new_limit").value;
       cell4.appendChild(element4);
 
       var cell5 = row.insertCell(4);
       var element5 = document.createElement("input");
       element5.type = "text";
-      element5.name = "default[]";
+      element5.name = "create_table[<%= @migration_func.name %>][" + column_name + "][default]";
+      element5.value = document.getElementById("new_default").value;
       cell5.appendChild(element5);
 
       var cell6 = row.insertCell(5);
       var element6 = document.createElement("input");
       element6.type = "checkbox";
-      element6.name="null[]";
-      element6.checked=true;
+      element6.name = "create_table[<%= @migration_func.name %>][" + column_name + "][null]";
+      element6.checked = document.getElementById("new_null").checked;
       cell6.appendChild(element6);
 
       var cell7 = row.insertCell(6);
       var element7 = document.createElement("input");
       element7.type = "text";
-      element7.name = "precision[]";
+      element7.name = "create_table[<%= @migration_func.name %>][" + column_name + "][precision]";
+      element7.value = document.getElementById("new_precision").value;
       cell7.appendChild(element7);
 
       var cell8 = row.insertCell(7);
       var element8 = document.createElement("input");
       element8.type = "text";
-      element8.name = "scale[]";
+      element8.name = "create_table[<%= @migration_func.name %>][" + column_name + "][scale]";
+      element8.value = document.getElementById("new_scale").value;
       cell8.appendChild(element8);
 
   }

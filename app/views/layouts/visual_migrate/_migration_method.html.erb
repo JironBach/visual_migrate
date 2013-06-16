@@ -1,0 +1,10 @@
+<table border="0" style="margin-left:2em;">
+  <tr>
+    <th width="100em">MethodName</th>
+    <td><%= method_select 'method_name[' + @migration_method.name + ']', @migration_method.name %></td>
+    <td><%= check_box_tag 'method_enable[' + @migration_method.name + ']', true, @enable %>enable　</td>
+  </tr>
+</table>
+<% @migration_method.funcs.each do |key, val| %>
+  <%= show_func(val) %> 
+<% end %>

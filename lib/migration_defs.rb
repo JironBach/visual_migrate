@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-module MigrateDefs
-  MethodNames = Array.new(['change', 'up', 'down'])
+module MigrationDefs
+  MethodNames = ['change', 'up', 'down']
 
-  FuncNames = Array.new([
+  FuncNames = [
       'create_table',
       'drop_table',
       'change_table',
@@ -14,50 +14,86 @@ module MigrateDefs
       'remove_column',
       'add_index',
       'remove_index',
-  ])
+  ]
 
-  class AbstractMigrateMethod
-    #abstract_method :get_str, '(str -> String)' #undefined method `abstract_method' for MigrateDefs::AbstractMigrateMethod:Class
+  ColumnType = {
+    'string' => '文字列',
+    'text' => '長い文字列',
+    'integer' => '整数',
+    'float' => '浮動小数',
+    'decimal' => '精度の高い小数',
+    'datetime' => '日時',
+    'timestamp' => 'より細かい日時',
+    'time' => '時間',
+    'date' => '日付',
+    'binary' => 'バイナリデータ',
+    'boolean' => 'Boolean型',
+    'timestamps' => 'レコードの作成・更新日時'
+  }
+ 
+  class MigrationClass
+    attr_accessor :name, :parent_name, :methods
+    
+    def initialize(name, parent_name = nil)
+      @name = name
+      @parent_name = parent_name
+      @methods = Hash.new
+    end
+    
+    def add_method(name)
+      @methods[name] = MigrationMethod.new(name)
+    end
+    
+    def get_str
+      result = 'class ' + @name + (@parent.name.nil? ? '' : '< ' + @parent.name) + "\n"
+      @methods.each do |method|
+        result += method.get_str
+      end
+      result += "end\n"
+    end
   end
   
-  class MigrateMethod < AbstractMigrateMethod
-    attr :name, :funcs
+  class AbstractMigrationMethod
+    #abstract_method :get_str, '(str -> String)' #undefined method `abstract_method' for MigrationDefs::AbstractMigrationMethod:Class
+  end
+  
+  class MigrationMethod < AbstractMigrationMethod
+    attr_accessor :name, :funcs
     
     def initialize(name)
       return nil if !MethodNames.include? name
       
       @name = name
-      @funcs = Array.new
+      @funcs = Hash.new
     end
 
-    def add_func(func_type, name, *func_options)
-      funcs << FuncFactory::get(func_type, name, func_options)
-      funcs.last
+    def add_func(func_type, func_name, *func_options)
+      @funcs[func_name] = FuncFactory::get(func_type, func_name)#, func_options)
     end
     
     def get_str
       result = 'def ' + @name + "\n"
-      funcs.each do |func|
+      @funcs.each do |func|
         result += func.get_str
       end
       result += "end\n"
-      result
     end
   end
   
   class FuncFactory
-    def self.get(func_type, name, *func_options)
+    def self.get(func_type, func_name, *func_options)#How do I dynamic params?
       case func_type
       when 'create_table'
-        return CreateTableFunc.new(name)#, func_options)#How do I dynamic params?
+        return CreateTableFunc.new(func_name)
       else
         return nil
       end
     end
   end
   
-  class ColumnOption < AbstractMigrateMethod
-    attr :limit, :default, :null, :precision, :scale
+  class ColumnOption < AbstractMigrationMethod
+    attr_accessor :limit, :default, :null, :precision, :scale
+    
     Description = {
       'limit' => 'カラムの桁数', 
       'default' => 'デフォルトの値',
@@ -81,46 +117,44 @@ module MigrateDefs
       result += !result.blank? ? ', ' : '' + ':null => ' + @null.to_s if !@null
       result += ', :precision => ' + @precision if !@precision.nil?
       result += ', :scale => ' + @scale + "\n" if !@scale.nil?
-      result
     end
   end
 
-  ColumnType = {
-    'string' => '文字列',
-    'text' => '長い文字列',
-    'integer' => '整数',
-    'float' => '浮動小数',
-    'decimal' => '精度の高い小数',
-    'datetime' => '日時',
-    'timestamp' => 'より細かい日時',
-    'time' => '時間',
-    'date' => '日付',
-    'binary' => 'バイナリデータ',
-    'boolean' => 'Boolean型',
-    'timestamps' => 'レコードの作成・更新日時'
-  }
- 
-  class Column < AbstractMigrateMethod
-    attr :name, :type, :option
+  class Column < AbstractMigrationMethod
+    attr_accessor :name, :type, :option
     
-    def initialize(type, name = '', option = ColumnOption.new)
+    def initialize(type, name = '')
       return nil if !ColumnType.has_key?(type)
 
       @type = type
       @name = name
-      @option = option
+      @option = ColumnOption.new
+    end
+    
+    def set_option(name, val)
+      case name
+      when 'limit'
+        @option.limit = val
+      when 'default'
+        @option.default = val
+      when 'null'
+        @option.null = val
+      when 'precision'
+        @option.precision = val
+      when 'scale'
+        @option.scale = val
+      end
     end
     
     def get_str
       result = 't.' + @type
       result += ' ' + @name
       result += @option.get_str + "\n"
-      result
     end
   end
   
-  class CreateTableOption < AbstractMigrateMethod
-    attr :id, :primary_key, :options, :temporary, :force
+  class CreateTableOption < AbstractMigrationMethod
+    attr_accessor :id, :primary_key, :options, :temporary, :force
     Description = {
       'id' => '主キーを自動生成', 
       'primary_key' => '主キーのカラムの名前',
@@ -144,16 +178,15 @@ module MigrateDefs
       result += result.blank? ? '' : ', ' + ':options => ' + @options if !@options.nil?
       result += result.blank? ? '' : ', ' + ':temporary => ' + @temporary if @temporary
       result += result.blank? ? '' : ', ' + ':force => ' + @force + "\n" if !@force
-      result
     end
   end
 
-  class CreateTableFunc < AbstractMigrateMethod
-    attr :name, :options, :columns
+  class CreateTableFunc < AbstractMigrationMethod
+    attr_accessor :name, :options, :columns
     
-    def initialize(name, id = true, primary_key = 'id', options = nil, temporary = false, force = true)
+    def initialize(name)
       @name = name
-      @options = CreateTableOption.new(id, primary_key, options, temporary, force)
+      @options = CreateTableOption.new
       @columns = Array.new
     end
     
@@ -167,10 +200,9 @@ module MigrateDefs
       result += @options.get_str
       result += " do |t|\n"
       @columns.each do |col|
-        result += col.get_str
+        result += col.get_str + "\n"
       end
       result += "end\n"
-      result
     end
   end
 end

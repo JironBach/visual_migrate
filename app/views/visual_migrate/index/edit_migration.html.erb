@@ -1,0 +1,12 @@
+<%= params.inspect %><br />
+<%= @mi_lex.inspect %><br />
+
+<% if @vm_ripper.nil? %>
+  Select Migration.
+<% else %>
+  <%= form_tag :action => :save_migration, :id => params[:id] do %>
+    <%= show_class @vm_ripper.class %>
+    <br />
+    <%= submit_tag 'save' %>
+  <% end %>
+<% end %>

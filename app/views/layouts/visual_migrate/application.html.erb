@@ -29,10 +29,9 @@
          <td width="650px">
           <div id="menu">
             <ul>
-              <li><%= link_to "Create Model", :action => :create_model %></li>
-              <li><%= link_to "Edit Migrations", :action => :edit_migrations %></li>
-              <li><%= link_to "Edit Tables", :action => :edit_tables %></li>
-              <li><%= link_to "Migrate", :action => :migrate %></li>
+              <li><%= link_to "Edit Migration", :action => :edit_migration, :id => params[:id] %></li>
+              <li><%= link_to "Direct Edit", :action => :direct_edit, :id => params[:id] %></li>
+              <li><%= link_to "Modify Table", :action => :edit_table %></li>
             </ul>
           </div>
          </td>

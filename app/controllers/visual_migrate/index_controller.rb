@@ -4,7 +4,7 @@ require_dependency "visual_migrate/application_controller"
 
 require 'pathname'
 require 'visual_migrate_ripper'
-require 'migrate_defs'
+require 'migration_defs'
 
 module VisualMigrate
   class IndexController < ApplicationController
@@ -27,53 +27,79 @@ module VisualMigrate
     end
     
     def index
-      edit_migrations
+      edit_migration
     end
     
-    def edit_migrations
+    def edit_migration
       show_migrations
       
-      migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
       if !params[:id].nil?
+        migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
         migration_content = ''
         open(migration_filename, 'r') do |f|
           migration_content = f.read
         end
 
-        @migration_content = Ripper.lex(migration_content)
+        @mi_lex = Ripper.lex(migration_content)
         vm_ripper = VisualMigrateRipper.new migration_content
         vm_ripper.parse
-        @context = vm_ripper.get_str
+        #@context = vm_ripper.get_str
         @vm_ripper = vm_ripper
-
-        #parsed_migration = RubyParser.new.parse(@context)
-        #@context = Ruby2Ruby.new.process(parsed_migration)
-        #open('/tmp/vm.txt', 'w') do |f|
-        #  f.write(@context)
-        #end
       end
       
-      render :edit_migrations
+      @edit_mode = 'edit_migration'
+      render :edit_migration
     end
     
-    def edit_tables
+    def save_migration
+      #migration_class = MigrationDefs::MigrationClass.create_from_param(params)
+      
+      #parsed_migration = RubyParser.new.parse(migration_class.get_str)
+      #@context = Ruby2Ruby.new.process(parsed_migration)
+      #open('/tmp/vm.txt', 'w') do |f|
+      #  f.write(@context)
+      #end
+
+      edit_migration
+    end
+    
+    def direct_edit
+      show_migrations
+      
+      if !params[:id].nil?
+        migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
+        @migration_content = ''
+        open(migration_filename, 'r') do |f|
+          @migration_content = f.read
+        end
+      end
+      
+      @mi_lex = Ripper.lex(@migration_content)
+
+      @edit_mode = 'direct_edit'
+      render :direct_edit
+    end
+    
+    def direct_save
+      if !params[:migration].blank?
+        migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
+        open(migration_filename, 'w') do |f|
+          f.write params[:migration]
+        end
+      end
+      
+      direct_edit
+    end
+    
+    def modify_table
       show_tables
       
-      render :edit_tables
+      render :modify_table
     end
     
     def add_migration
-      edit_tables
+      modify_table
     end
     
-    def create_model
-      show_tables
-
-      render :create_model
-    end
-    
-    def do_create_model
-      create_model
-    end
   end
 end

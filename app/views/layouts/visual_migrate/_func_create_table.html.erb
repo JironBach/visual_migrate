@@ -2,7 +2,7 @@
   <tr>
     <th width="100em">FuncName</th>
     <td width='100em'>create_table</td>
-    <td><%= check_box_tag :func_delete, true, false %>delete　</td>
+    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][delete]', true, false %>delete　</td>
   </tr>
 </table>
 <table border="0" style="margin-left:6em;">
@@ -14,11 +14,11 @@
     <th>force</th>
   </tr>
   <tr>
-    <td><%= check_box_tag :create_id, true, @func.options.id %></td>
-    <td><%= text_field_tag :create_primary_key, @func.options.primary_key %></td>
-    <td><%= text_field_tag :create_options, @func.options.options %></td>
-    <td><%= check_box_tag :create_temporary, true, @func.options.temporary %></td>
-    <td><%= check_box_tag :create_force, true, @func.options.force %></td>
+    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][id]', true, @migration_func.options.id %></td>
+    <td><%= text_field_tag 'create_table[' + @migration_func.name + '][primary_key]', @migration_func.options.primary_key %></td>
+    <td><%= text_field_tag 'create_table[' + @migration_func.name + '][options]', @migration_func.options.options %></td>
+    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][temporary]', true, @migration_func.options.temporary %></td>
+    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][force]', true, @migration_func.options.force %></td>
   </tr>
 </table>
-<%= show_columns @func.columns %>
+<%= show_columns @migration_func.name, @migration_func.columns %>
