@@ -1,8 +1,9 @@
 <table border="0" style="margin-left:4em;">
   <tr>
-    <th width="100em">FuncName</th>
-    <td width='100em'>create_table</td>
-    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][delete]', true, false %>delete　</td>
+    <th width="80em">Func</th>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][name]', 'create_table', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][table_name]', @migration_func.name %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][delete]', true, false %>delete　</td>
   </tr>
 </table>
 <table border="0" style="margin-left:6em;">
@@ -14,11 +15,11 @@
     <th>force</th>
   </tr>
   <tr>
-    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][id]', true, @migration_func.options.id %></td>
-    <td><%= text_field_tag 'create_table[' + @migration_func.name + '][primary_key]', @migration_func.options.primary_key %></td>
-    <td><%= text_field_tag 'create_table[' + @migration_func.name + '][options]', @migration_func.options.options %></td>
-    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][temporary]', true, @migration_func.options.temporary %></td>
-    <td><%= check_box_tag 'create_table[' + @migration_func.name + '][force]', true, @migration_func.options.force %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][id]', true, @migration_func.option.id %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][primary_key]', @migration_func.option.primary_key %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][options]', @migration_func.option.options %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][temporary]', true, @migration_func.option.temporary %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][force]', true, @migration_func.option.force %></td>
   </tr>
 </table>
 <%= show_columns @migration_func.name, @migration_func.columns %>

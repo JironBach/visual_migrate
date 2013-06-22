@@ -61,10 +61,10 @@ class VisualMigrateRipper < Ripper::Filter
         @column_type = tok
         @is_column = true
       end
-    elsif !@method_name.nil? && MigrationDefs::FuncNames.include?(tok)
+    elsif !@method_name.nil? && MigrationDefs::FuncName.include?(tok)
       @func_type = tok
       @is_func = true
-    elsif @method_name.nil? && MigrationDefs::MethodNames.include?(tok)
+    elsif @method_name.nil? && MigrationDefs::MethodName.include?(tok)
       @method_name = tok
       @class.add_method(tok)
     end
@@ -76,9 +76,9 @@ class VisualMigrateRipper < Ripper::Filter
     elsif @is_super
       @parent_name = tok
     elsif @is_class
-      @class = MigrationDefs::MigrationClass.new(tok, @parent_name)
-      @is_class = false
+      @class_name = tok
     end
+    puts @parent_name
   end
   
   def on_op(tok, f)
@@ -91,9 +91,10 @@ class VisualMigrateRipper < Ripper::Filter
   
   def on_nl(tok, f)
     if @is_class
+      @class = MigrationDefs::MigrationClass.new(@class_name, @parent_name)
+      @is_class = false
       @is_ancestors = false
       @is_super = false
-      @is_class = false
     elsif !@on_comma
       @is_option = false
     end
@@ -104,6 +105,7 @@ class VisualMigrateRipper < Ripper::Filter
   end
   
   def on_comma(tok, f)
+    @on_comma = true
     @is_option = true
   end
   

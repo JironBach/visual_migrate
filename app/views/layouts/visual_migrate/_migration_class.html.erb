@@ -1,9 +1,9 @@
 <table border="0">
   <tr>
-    <th width="100em">ClassName</th>
-    <td><%= text_field_tag :migration_class_name, @migration_class.name %></td>
-    <th width="100em">Parerent</th>
-    <td><%= text_field_tag :migraiton_parent_name, @migration_class.parent_name, :size => '40em' %></td>
+    <th width="80em">Class</th>
+    <td><%= text_field_tag :class_name, @migration_class.name %></td>
+    <th width="80em">Parerent</th>
+    <td><%= text_field_tag :parent_name, @migration_class.parent, :size => '40em' %></td>
   </tr>
 </table>
 <% m_check = Array.new %>
@@ -11,6 +11,6 @@
   <%= show_method val %>
   <% m_check << key %>
 <% end %>
-<% MigrationDefs::MethodNames.each do |mn| %>
+<% MigrationDefs::MethodName.each do |mn| %>
   <%= show_disabled_method MigrationDefs::MigrationMethod.new mn if !m_check.include?(mn) %>
 <% end %>

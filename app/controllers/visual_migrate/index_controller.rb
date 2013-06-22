@@ -52,10 +52,12 @@ module VisualMigrate
     end
     
     def save_migration
-      #migration_class = MigrationDefs::MigrationClass.create_from_param(params)
+      migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
+      migration_class.parse_from_params params
       
       #parsed_migration = RubyParser.new.parse(migration_class.get_str)
-      #@context = Ruby2Ruby.new.process(parsed_migration)
+      @context = migration_class.get_str#Ruby2Ruby.new.process(parsed_migration)
+      
       #open('/tmp/vm.txt', 'w') do |f|
       #  f.write(@context)
       #end
@@ -101,5 +103,8 @@ module VisualMigrate
       modify_table
     end
     
+    def command_line
+      render :command_line
+    end
   end
 end

@@ -5,11 +5,11 @@ module VisualMigrate
     end
     
     def method_select(id, select)
-      select_tag(id, options_for_select(MigrationDefs::MethodNames, select))
+      select_tag(id, options_for_select(MigrationDefs::MethodName, select))
     end
     
     def func_select(id, select)
-      select_tag(id, options_for_select(MigrationDefs::FuncNames, select))
+      select_tag(id, options_for_select(MigrationDefs::FuncName, select))
     end
     
     def show_class(migration_class)

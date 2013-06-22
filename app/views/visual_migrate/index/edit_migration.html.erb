@@ -1,5 +1,6 @@
-<%= params.inspect %><br />
-<%= @mi_lex.inspect %><br />
+<%= raw nl2br @context if !@context.nil? %><br /><br />
+<%= params.inspect %><br /><br />
+<%= @mi_lex.inspect %><br /><br />
 
 <% if @vm_ripper.nil? %>
   Select Migration.
