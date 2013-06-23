@@ -1,17 +1,24 @@
-<% repo = Grit::Repo.new(Pathname(Rails.root.to_s)) %>
-<% diffs = repo.commits('master', 1, 0).first.diffs %>
+<%
+  begin
+    repo = Grit::Repo.new(Pathname(Rails.root.to_s))
+    diffs = repo.commits('master', 1, 0).first.diffs
+  rescue
+  end
+%>
 <h3>Migration Files</h3>
 <% if !(@migration_files.nil? || @migration_files.blank?) %>
   <ul>
     <% @migration_files.each do |mf| %>
      <%
-      paths = [];
-      @commit.diffs.each do |diff|
-        paths += [diff.a_path, diff.b_path]
+      if !diffs.nil?
+        paths = [];
+        diffs.each do |diff|
+          paths += [diff.a_path, diff.b_path]
+        end
+        paths.uniq!
       end
-      paths.uniq!
      %>
-     <%= paths.inspect %>
+     <%= paths.inspect if !paths.nil? %>
      <%= link_to mf.basename, :action => @edit_mode, :id => mf.basename('.rb') %><br />
     <% end %>
   </ul>
