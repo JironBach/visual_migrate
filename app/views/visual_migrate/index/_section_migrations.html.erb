@@ -2,7 +2,7 @@
 <% if !(@migration_files.nil? || @migration_files.blank?) %>
   <ul>
     <% @migration_files.each do |mf| %>
-     <li><%= link_to mf.basename, :action => @edit_mode, :id => mf.basename('.rb') %></li>
+     <%= link_to mf.basename, :action => @edit_mode, :id => mf.basename('.rb') %><br />
     <% end %>
   </ul>
 <% else %>

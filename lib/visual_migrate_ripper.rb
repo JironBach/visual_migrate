@@ -42,9 +42,7 @@ class VisualMigrateRipper < Ripper::Filter
     if tok == 't'
       @is_column_type = true
     elsif @is_column_type
-      puts tok
       if tok == 'timestamps'
-        puts tok
         @class.methods[@method_name].funcs[@func_name].add_column(tok)
         @column_type = nil
       else

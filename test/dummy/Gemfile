@@ -95,7 +95,7 @@ end
 gem 'dispatcher'
 gem 'oauth'
 
-#gem "rake", "0.8.7"
+gem 'rake', '~> 10.0.4'
 #gem 'meta_where'
 gem 'ckeditor'
 gem 'rails-ckeditor'

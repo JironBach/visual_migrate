@@ -7,8 +7,9 @@ require 'visual_migrate_ripper'
 require 'migration_defs'
 
 module VisualMigrate
+  include ApplicationHelper
+
   class IndexController < ApplicationController
-    
     def show_migrations
       @section_category = :migrations
       
@@ -76,8 +77,11 @@ module VisualMigrate
         end
       end
       
-      @mi_lex = Ripper.lex(@migration_content)
-
+      begin
+        @mi_lex = Ripper.lex(@migration_content)
+      rescue
+      end
+      
       @edit_mode = 'direct_edit'
       render :direct_edit
     end
@@ -106,5 +110,21 @@ module VisualMigrate
     def command_line
       render :command_line
     end
+
+    def run_command
+      command = params[:content]
+      if (command =~ /rake .*/) || (command =~ /rails .*/) || (command =~ /git .*/)
+        begin
+          content = `#{command}`
+        rescue
+          content = '<font color="red">failed</font>'
+        end
+      else
+        content = '<font color="red">available commands are "rake", "rails" and "git".</font>'
+      end
+
+      render :text => self.class.helpers.nl2br(content)
+    end
+  
   end
 end

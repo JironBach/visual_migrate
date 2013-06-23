@@ -144,12 +144,12 @@ module MigrationDefs
 	  end
     
     def get_str
-      result = ' '
+      result = ''
       result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
-      result += (!result.blank? ? ', ' : '') + ':default => ' + @default.to_s if !@default.blank?
-      result += (!result.blank? ? ', ' : '') + ':null => ' + @null.to_s if !@null
-      result += (!result.blank? ? ', ' : '') + ':precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
-      result += (!result.blank? ? ', ' : '') + ':scale => ' + @scale.to_s if !@scale.nil? && @scale != 0
+      result += ', :default => ' + @default.to_s if !@default.blank?
+      result += ', :null => ' + @null.to_s if !@null
+      result += ', :precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
+      result += ', :scale => ' + @scale.to_s if !@scale.nil? && @scale != 0
       result
     end
   end
@@ -182,7 +182,7 @@ module MigrationDefs
     
     def get_str
       result = 't.' + @type
-      result += ' ' + @name
+      (result += ' :' + @name) if !@name.blank?
       result += @option.get_str
     end
   end
