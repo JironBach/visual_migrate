@@ -55,12 +55,12 @@ module VisualMigrate
       migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
       migration_class.parse_from_params params
       
-      #parsed_migration = RubyParser.new.parse(migration_class.get_str)
-      @context = migration_class.get_str#Ruby2Ruby.new.process(parsed_migration)
+      parsed_migration = RubyParser.new.parse(migration_class.get_str)
+      @context = Ruby2Ruby.new.process(parsed_migration)
       
-      #open('/tmp/vm.txt', 'w') do |f|
-      #  f.write(@context)
-      #end
+      open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
+        f.write(@context)
+      end
 
       edit_migration
     end

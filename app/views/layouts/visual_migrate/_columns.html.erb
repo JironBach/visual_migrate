@@ -12,11 +12,11 @@
       <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
       <td><%= column_select '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][type]', col.type %></td>
       <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][name]', col.name, :readonly => true %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][limit]', col.option.limit %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][default]', col.option.default %></td>
-      <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][null]', true, col.option.null %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][precision]', col.option.precision %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][scale]', col.option.scale %></td>
+      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][limit]', col.option.limit if !col.option.nil? %></td>
+      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][default]', col.option.default if !col.option.nil? %></td>
+      <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][null]', true, col.option.null if !col.option.nil? %></td>
+      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][precision]', col.option.precision if !col.option.nil? %></td>
+      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (col.name.blank? ? 'timestamps' :col.name) + '][scale]', col.option.scale if !col.option.nil? %></td>
     </tr>
   <% end %>
 </table>

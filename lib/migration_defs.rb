@@ -145,7 +145,7 @@ module MigrationDefs
     
     def get_str
       result = ' '
-      result += ':limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
+      result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
       result += (!result.blank? ? ', ' : '') + ':default => ' + @default.to_s if !@default.blank?
       result += (!result.blank? ? ', ' : '') + ':null => ' + @null.to_s if !@null
       result += (!result.blank? ? ', ' : '') + ':precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
