@@ -5,12 +5,16 @@
     <th width="80em">Parerent</th>
     <td><%= text_field_tag :parent_name, @migration_class.parent, :size => '40em' %></td>
   </tr>
+  <tr>
+    <td colspan="4">
+      <% m_check = Array.new %>
+      <% @migration_class.methods.each do |key, val| %>
+        <%= show_method val %>
+        <% m_check << key %>
+      <% end %>
+      <% MigrationDefs::MethodName.each do |mn| %>
+        <%= show_disabled_method MigrationDefs::MigrationMethod.new mn if !m_check.include?(mn) %>
+      <% end %>
+    </td>
+  </tr>
 </table>
-<% m_check = Array.new %>
-<% @migration_class.methods.each do |key, val| %>
-  <%= show_method val %>
-  <% m_check << key %>
-<% end %>
-<% MigrationDefs::MethodName.each do |mn| %>
-  <%= show_disabled_method MigrationDefs::MigrationMethod.new mn if !m_check.include?(mn) %>
-<% end %>

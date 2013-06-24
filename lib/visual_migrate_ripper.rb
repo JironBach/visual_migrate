@@ -20,6 +20,7 @@ class VisualMigrateRipper < Ripper::Filter
       @is_class = true
     elsif tok == 'def'
       @is_method = true
+      @is_func = false
     elsif tok == 'end'
       if @is_column
         @is_column = false
@@ -29,6 +30,7 @@ class VisualMigrateRipper < Ripper::Filter
         @is_func = false
       elsif @is_method
         @is_method = false
+        @method_name = nil
       end
     elsif tok == 'true' || tok == 'false'
       if @is_option && !@option_name.nil?
@@ -45,6 +47,7 @@ class VisualMigrateRipper < Ripper::Filter
       if tok == 'timestamps'
         @class.methods[@method_name].funcs[@func_name].add_column(tok)
         @column_type = nil
+        @is_column = false
       else
         @column_type = tok
         @is_column = true
@@ -66,10 +69,11 @@ class VisualMigrateRipper < Ripper::Filter
         @func_name = tok
         @func_type = nil
       end
+      @is_func = false
     elsif !@method_name.nil? && MigrationDefs::FuncName.include?(tok)
       @func_type = tok
       @is_func = true
-    elsif @method_name.nil? && MigrationDefs::MethodName.include?(tok)
+    elsif MigrationDefs::MethodName.include?(tok)
       @method_name = tok
       @class.add_method(tok)
     end
@@ -102,10 +106,19 @@ class VisualMigrateRipper < Ripper::Filter
     end
     @is_option = false
     @is_column = false
+    @is_func = false
   end
   
   def on_do_block(tok, f)
     @is_do = true
+  end
+  
+  def on_lbrase(tok, f)
+    #@is_brase = true
+  end
+  
+  def on_rbrase(tok, f)
+    #@is_brase = false
   end
   
   def on_comma(tok, f)

@@ -23,7 +23,6 @@ module VisualMigrate
     
     def show_tables
       @section_category = :tables
-      
       @tables = ActiveRecord::Base.connection.tables
     end
     
@@ -34,8 +33,14 @@ module VisualMigrate
     def edit_migration
       show_migrations
       
-      if !params[:id].nil?
-        migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
+      if !params[:id].nil? || @tmp
+        if !@tmp
+          migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
+        else
+          migration_filename = '/tmp/visual-migrate_tmp.rb'
+        end
+        @tmp = false
+        
         migration_content = ''
         open(migration_filename, 'r') do |f|
           migration_content = f.read
@@ -57,12 +62,39 @@ module VisualMigrate
       migration_class.parse_from_params params
       
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
-      @context = Ruby2Ruby.new.process(parsed_migration)
+      @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params.inspect#
       
       open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
+      #@tmp = true
+      #open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
         f.write(@context)
       end
 
+      edit_migration
+    end
+    
+    def add_function
+      if !params[:new_func].nil?
+        migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
+        migration_class.parse_from_params params
+        params[:new_func].each do |p_key, p_val|
+          if !migration_class.methods.has_key?(p_key)
+            migration_class.add_method(p_key)
+          end
+          migration_class.methods.each do |m_key, m_val|#not DRY
+            m_val.add_func(p_val[:type], p_val[:name]) if (p_key == m_key) && !p_val[:name].blank? && (p_val[:delete] != 'true')
+          end
+        end
+
+        parsed_migration = RubyParser.new.parse(migration_class.get_str)
+        @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
+
+        open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
+          f.write(@context)
+        end
+        @tmp = true
+      end
+      
       edit_migration
     end
     
@@ -108,10 +140,14 @@ module VisualMigrate
     end
     
     def command_line
+      show_migrations
+      
       render :command_line
     end
 
     def run_command
+      show_migrations
+      
       command = params[:content]
       if (command =~ /rake .*/) || (command =~ /rails .*/) || (command =~ /git .*/)
         begin

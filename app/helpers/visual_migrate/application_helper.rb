@@ -13,6 +13,8 @@ module VisualMigrate
     end
     
     def show_class(migration_class)
+      return '' if migration_class.nil?
+      
       @migration_class = migration_class
       render :partial => "layouts/visual_migrate/migration_class"#Why???
     end

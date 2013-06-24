@@ -41,14 +41,14 @@ module MigrationDefs
     end
     
     def parse_from_params(parse_params)
+      return '' if parse_params[:methods].nil?
+      
       parse_params[:methods].each do |key, val|
         add_method(key) if val[:enable] == 'true'
       end
-      if !methods.blank?
-        parse_params[:methods].each do |p_key, p_val|#not DRY
-          @methods.each do |m_key, m_val|
-            m_val.parse_from_params(p_val) if p_key == m_key
-          end
+      parse_params[:methods].each do |p_key, p_val|#not DRY
+        @methods.each do |m_key, m_val|
+          m_val.parse_from_params(p_val) if p_key == m_key
         end
       end
     end
@@ -88,8 +88,10 @@ module MigrationDefs
     end
     
     def parse_from_params(parse_params)
+      return '' if parse_params[:funcs].nil?
+      
       parse_params[:funcs].each do |key, val|
-        add_func(val[:name], val[:table_name])
+        add_func(val[:name], val[:table_name]) if val[:delete] != 'true'
       end
       parse_params[:funcs].each do |p_key, p_val|#not DRY
         @funcs.each do |m_key, m_val|
@@ -182,7 +184,7 @@ module MigrationDefs
     
     def get_str
       result = 't.' + @type
-      (result += ' :' + @name) if !@name.blank?
+      result += ' :' + @name if @type != 'timestamps'
       result += @option.get_str
     end
   end
@@ -249,10 +251,12 @@ module MigrationDefs
     end
     
     def parse_from_params(parse_params)
-      puts parse_params[:columns].inspect
+      return '' if parse_params[:columns].nil?
       
       parse_params[:columns].each do |key, val|
-        if key != 'timestamps'
+        next if val.nil?
+        
+        if val[:type] != 'timestamps'
           c = add_column(val[:type], val[:name])
           c.set_option 'limit', val[:limit]
           c.set_option 'default', val[:default]
