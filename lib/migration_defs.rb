@@ -3,18 +3,24 @@
 module MigrationDefs
   MethodName = ['change', 'up', 'down']
 
-  FuncName = [
-      'create_table',
-      'drop_table',
-      'change_table',
-      'rename_table',
-      'add_column',
-      'rename_column',
-      'change_column',
-      'remove_column',
-      'add_index',
-      'remove_index',
-  ]
+  FuncName = {
+      'create_table' => 'テーブルの作成',
+      'rename_table' => 'テーブル名を変更',
+      'drop_table' => 'テーブルの削除',
+      #'change_table' => 'テーブル定義を変更',#not support
+      'add_column' => 'カラムの追加',
+      'rename_column' => 'カラム名の変更',
+      'change_column' => 'カラムの変更カラムの変更',
+      'remove_column' => 'カラムの削除',
+      #'remove_columns' => '複数のカラムを削除',#not support
+      'change_column_default' => 'カラムの初期値を設定',
+      'add_index' => 'インデックスの追加',
+      'rename_index' => 'インデックスの変更',
+      'remove_index' => 'インデックスの削除',
+      #'timestamps' => 'created_atとupdated_atを生成',#@create_table
+      'add_timestamps' => 'created_atとupdated_atを追加',
+      'remove_timestamps' => 'created_atとupdated_atの削除',
+  }
 
   ColumnType = {
     'string' => '文字列',
@@ -68,12 +74,12 @@ module MigrationDefs
     end
   end
   
-  class AbstractMigrationMethod
-    #abstract_method :get_str, '(str -> String)' #undefined method `abstract_method' for MigrationDefs::AbstractMigrationMethod:Class
+  class AbstractMigrationClass
+    #abstract_method :get_str, '(str -> String)' #undefined method `abstract_method' for MigrationDefs::AbstractMigrationClass:Class
     #abstract_method :parse_from_params, '(str -> String)'
   end
   
-  class MigrationMethod < AbstractMigrationMethod
+  class MigrationMethod < AbstractMigrationClass
     attr_accessor :name, :funcs
     
     def initialize(name)
@@ -103,7 +109,7 @@ module MigrationDefs
     def get_str
       result = 'def ' + @name + "\n"
       @funcs.each do |key, val|
-        result += val.get_str
+        result += val.get_str if !val.nil?
       end
       result += "end\n"
     end
@@ -113,20 +119,27 @@ module MigrationDefs
     def self.get(func_type, func_name, *func_options)#How do I dynamic params?
       case func_type
       when 'create_table'
-        result = CreateTableFunc.new(func_name)
-        result.option.id = func_options[0]
-        result.option.primary_key = func_options[1]
-        result.option.options = func_options[2]
-        result.option.temporary = func_options[3]
-        result.option.force = func_options[4]
-        result
+        return CreateTableFunc.new(func_name)
+      when 'rename_table'
+      when 'drop_table'
+        return DropTableFunc.new(func_name)
+      when 'add_column'
+      when 'rename_column'
+      when 'change_column' 
+      when 'remove_column'
+      when 'change_column_default'
+      when 'add_index'
+      when 'rename_index'
+      when 'remove_index'
+      when 'add_timestamps'
+      when 'remove_timestamps'
       else
         return nil
       end
     end
   end
   
-  class ColumnOption < AbstractMigrationMethod
+  class ColumnOption < AbstractMigrationClass
     attr_accessor :limit, :default, :null, :precision, :scale
     
     Description = {
@@ -156,7 +169,7 @@ module MigrationDefs
     end
   end
 
-  class Column < AbstractMigrationMethod
+  class Column < AbstractMigrationClass
     attr_accessor :name, :type, :option
     
     def initialize(type, name = '', *p_option)
@@ -189,7 +202,7 @@ module MigrationDefs
     end
   end
   
-  class CreateTableOption < AbstractMigrationMethod
+  class CreateTableOption < AbstractMigrationClass
     attr_accessor :id, :primary_key, :options, :temporary, :force
 
     Description = {
@@ -211,32 +224,30 @@ module MigrationDefs
     def set_option(key, val)
       case key
       when 'id'
-        @option.id = val
+        @id = (val == 'true')
       when 'primary_key'
-        @option.primary_key = val
+        @primary_key = val
       when 'options'
-        @option.temporary = val
+        @options = val
       when 'temporary'
-        @option.temporary = val
+        @temporary = (val == 'true')
       when 'force'
-        @option.force = val
+        @force = (val == 'true')
       end
     end
     
     def get_str
-      puts self.inspect
-      
       result = ''
-      result += result.blank? ? '' : ', ' + ':id => ' + @id.to_s if !@id
-      result += result.blank? ? '' : ', ' + ':primry_key => ' + @primary_key if @primary_key != 'id'
-      result += result.blank? ? '' : ', ' + ':options => ' + @options if !@options.nil?
-      result += result.blank? ? '' : ', ' + ':temporary => ' + @temporary if !@temporary.blank? && @temporary != 'false'
-      result += result.blank? ? '' : ', ' + ':force => ' + @force if !@force.blank? && @force != 'true'
+      result += ', ' + ':id => ' + @id.to_s if !@id.nil? && !@id
+      result += ', ' + ':primary_key => ' + @primary_key if @primary_key != 'id'
+      result += ', ' + ':options => ' + @options if !@options.nil? && !@options.blank?
+      result += ', ' + ':temporary => ' + @temporary if !@temporary.nil? && @temporary != false
+      result += ', ' + ':force => ' + @force if !@force.nil? && @force != true
       result
     end
   end
 
-  class CreateTableFunc < AbstractMigrationMethod
+  class CreateTableFunc < AbstractMigrationClass
     attr_accessor :name, :option, :columns
     
     def initialize(name)
@@ -251,7 +262,11 @@ module MigrationDefs
     end
     
     def parse_from_params(parse_params)
-      return '' if parse_params[:columns].nil?
+      return '' if parse_params.nil? || parse_params[:columns].nil?
+      
+      parse_params.each do |key, val|
+        @option.set_option(key, val)
+      end
       
       parse_params[:columns].each do |key, val|
         next if val.nil?
@@ -271,12 +286,96 @@ module MigrationDefs
     
     def get_str
       result = 'create_table :' + @name
-      result += @options.get_str if !@options.nil?
+      result += @option.get_str if !@option.nil?
       result += " do |t|\n"
       @columns.each do |col|
-        result += col.get_str + "\n"
+        result += col.get_str + "\n" if !col.nil?
       end
       result += "end\n"
     end
   end
+
+  class DropTableFunc < AbstractMigrationClass
+    attr_accessor :name
+    
+    def initialize(name)
+      @name = name
+    end
+    
+    def parse_from_params(parse_params)
+      return ''
+    end
+    
+    def get_str
+      'drop_table :' + @name + "\n"
+    end
+  end
+
+=begin
+  class ChangeTableOption < AbstractMigrationClass
+    attr_accessor :name, :column, :value
+    
+    Description = {
+      'index' => 'インデックス',
+      'change' => 'カラムを変更',
+      'change_default' => 'カラムのデフォルト値を変更',
+      'rename' => 'カラムの名前を変更',
+      'remove' => 'カラムを削除',
+      'remove_references' => 'リファレンスの削除',
+      'remove_index' => 'インデックスの削除',
+      'remove_timestamps' => 'タイムスタンプの削除',
+    }
+
+    def initialize(name, column, value = nil)
+      return nil if !Description.has_key?(name)
+      
+      @name = name
+      @column = column
+      @value = value
+    end
+    
+    def get_str
+      result = 't.' + @name + ' :' + @column
+      result += ', :' + @value if !@value.blank?
+      result
+    end
+  end
+
+  class ChangeTableFunc < AbstractMigrationClass
+    attr_accessor :name, :option, :options
+    
+    def initialize(name)
+      @name = name
+      #@option = {:bulk => false}
+      @options = Array.new
+    end
+    
+    def add_option(option, column, value = nil)
+      @options << ChangeTableOption.new(option, column, value)
+      @options.last
+    end
+    
+    def parse_from_params(parse_params)
+      return '' if parse_params.nil? || parse_params[:options].nil?
+      
+      parse_params[:options].each do |key, val|
+        puts val
+        next if val.nil?
+        
+        add_option(val[:name], val[:column], val[:value])
+      end
+    end
+    
+    def get_str
+      result = 'change_table :' + @name
+      #result += @option.get_str if !@option.nil?
+      result += " do |t|\n"
+      @options.each do |opt|
+        result += opt.get_str + "\n" if !opt.nil?
+      end
+      result += "end\n"
+    end
+  end
+=end
+  
 end

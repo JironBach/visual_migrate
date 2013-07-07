@@ -1,0 +1,45 @@
+  <table id='new_func' border="0" style="margin-left:2em;">
+  <tr>
+    <th>FuncType</th>
+    <th colspan="2">TableName</th>
+  </tr>
+  <tr>
+    <td><%= func_select '[new_func][' + params[:method_name] + '][type]', '' %></td>
+    <td>
+      <%= tables_select '[new_func][' + params[:method_name] + '][table_name]'#,
+        #'_new_option_' + params[:method_name] + '_' + @migration_func.name + '_column_select',
+        #params[:method_name], @migration_func.name
+      %>
+    </td>
+    <td><%= text_field_tag '[new_func][' + params[:method_name] + '][new_table_name]' %></td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <%= button_to_function :add_function, 'addFunc_' + params[:method_name] + '();' %>
+      <input type="button" name="cancel" value="Cancel" onclick="window.close();">
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  function addFunc_<%= params[:method_name] %>(){
+    if(document.getElementById("_new_func_<%= params[:method_name] %>_type").value == "") {
+      alert("Select function.");
+      return;
+    }
+    if(document.getElementById("_new_func_<%= params[:method_name] %>_table_name").value == "" &&
+       document.getElementById("_new_func_<%= params[:method_name] %>_new_table_name").value == "") {
+      alert("Select or Input table.");
+      return;
+    }
+
+    window.dialogArguments.document.getElementById("_new_func_<%= params[:method_name] %>_type").value =
+            document.getElementById("_new_func_<%= params[:method_name] %>_type").value
+    window.dialogArguments.document.getElementById("_new_func_<%= params[:method_name] %>_table_name").value =
+            document.getElementById("_new_func_<%= params[:method_name] %>_table_name").value;
+    window.dialogArguments.document.getElementById("_new_func_<%= params[:method_name] %>_new_table_name").value =
+            document.getElementById("_new_func_<%= params[:method_name] %>_new_table_name").value;
+    
+    window.close();
+  }
+</script>

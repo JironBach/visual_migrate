@@ -3,4 +3,5 @@ VisualMigrate::Engine.routes.draw do
   
   #match '/:controller(/:action(/:id))', :controller => /visual_migrate\/[^\/]+/
   match 'index(/:action(/:id))', :controller => :index
+  match 'dialog(/:action(/:id))', :controller => :dialog
 end

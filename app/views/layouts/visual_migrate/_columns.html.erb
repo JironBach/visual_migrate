@@ -46,7 +46,7 @@
   function addColumn_<%= @migration_method.name + '_' + @migration_func.name %>(tableID) {
       if((document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_type").value != "timestamps") && 
          (document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value == "")) {
-        alert("Input Column Name");
+        alert("Input column name.");
         return;
       }
 
@@ -61,15 +61,15 @@
       var rowCount = table.rows.length;
       var row = table.insertRow(rowCount);
 
-      var cell1 = row.insertCell(0);
-      var element1 = document.createElement("input");
-      element1.type = "checkbox";
-      element1.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][delete]";
-      cell1.appendChild(element1);
+      var cell0 = row.insertCell(0);
+      var element0 = document.createElement("input");
+      element0.type = "checkbox";
+      element0.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][delete]";
+      cell0.appendChild(element0);
 
-      var cell2 = row.insertCell(1);
-      var element2 = document.createElement("select");
-      element2.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][type]";
+      var cell1 = row.insertCell(1);
+      var element1 = document.createElement("select");
+      element1.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][type]";
       <% keys = MigrationDefs::ColumnType.keys.reverse#Why??? %>
       var i = <%= keys.count-1 %>;
       var selectedIndex = 0;
@@ -77,56 +77,56 @@
         var option_<%= ct %>  = document.createElement("option");
         option_<%= ct %>.text = "<%= ct %>";
         option_<%= ct %>.value = "<%= ct %>";
-        element2.options.add(option_<%= ct %>, "<%= ct %>");
+        element1.options.add(option_<%= ct %>, "<%= ct %>");
         if("<%= ct %>" == document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_type").value) selectedIndex = i;
         i--;
       <% end %>
-      element2.options.selectedIndex = selectedIndex;
-      cell2.appendChild(element2);
+      element1.options.selectedIndex = selectedIndex;
+      cell1.appendChild(element1);
 
-      var cell3 = row.insertCell(2);
-      var element3 = document.createElement("input");
-      element3.type = "text";
-      element3.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][name]";
-      element3.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value;
-      element3.readOnly = true;
-      cell3.appendChild(element3);
+      var cell2 = row.insertCell(2);
+      var element2 = document.createElement("input");
+      element2.type = "text";
+      element2.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][name]";
+      element2.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value;
+      element2.readOnly = true;
+      cell2.appendChild(element2);
       document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value = "";
 
-      var cell4 = row.insertCell(3);
+      var cell3 = row.insertCell(3);
+      var element3 = document.createElement("input");
+      element3.type = "text";
+      element3.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][limit]";
+      element3.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_limit").value;
+      cell3.appendChild(element3);
+
+      var cell4 = row.insertCell(4);
       var element4 = document.createElement("input");
       element4.type = "text";
-      element4.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][limit]";
-      element4.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_limit").value;
+      element4.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][default]";
+      element4.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_default").value;
       cell4.appendChild(element4);
 
-      var cell5 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
       var element5 = document.createElement("input");
-      element5.type = "text";
-      element5.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][default]";
-      element5.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_default").value;
+      element5.type = "checkbox";
+      element5.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][null]";
+      element5.checked = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_null").checked;
       cell5.appendChild(element5);
 
-      var cell6 = row.insertCell(5);
+      var cell6 = row.insertCell(6);
       var element6 = document.createElement("input");
-      element6.type = "checkbox";
-      element6.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][null]";
-      element6.checked = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_null").checked;
+      element6.type = "text";
+      element6.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][precision]";
+      element6.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_precision").value;
       cell6.appendChild(element6);
 
-      var cell7 = row.insertCell(6);
+      var cell7 = row.insertCell(7);
       var element7 = document.createElement("input");
       element7.type = "text";
-      element7.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][precision]";
-      element7.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_precision").value;
+      element7.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][scale]";
+      element7.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_scale").value;
       cell7.appendChild(element7);
-
-      var cell8 = row.insertCell(7);
-      var element8 = document.createElement("input");
-      element8.type = "text";
-      element8.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][scale]";
-      element8.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_scale").value;
-      cell8.appendChild(element8);
 
   }
 </script>

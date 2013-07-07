@@ -22,57 +22,69 @@ class VisualMigrateRipper < Ripper::Filter
       @is_method = true
       @is_func = false
     elsif tok == 'end'
-      if @is_column
-        @is_column = false
+      if @is_option
+        @is_option = false
       elsif @is_do
         @is_do = false
       elsif @is_func
         @is_func = false
       elsif @is_method
         @is_method = false
-        @method_name = nil
       end
     elsif tok == 'true' || tok == 'false'
-      if @is_option && !@option_name.nil?
-        @class.methods[@method_name].funcs[@func_name].columns.last.set_option(@option_name, "'" + tok + "'")
-        @option_name = nil
+      if @is_option_option && !@option_option_name.nil?
+        @class.methods[@method_name].funcs[@func_name].options.last.set_option(@option_option_name, "'" + tok + "'")
+        @option_option_name = nil
+      elsif @is_func_option && !@func_option.nil?
+        @func_class.option.set_option(@func_option, tok)
+        @func_option = nil
       end
     end
   end
 
   def on_ident(tok, f)
     if tok == 't'
-      @is_column_type = true
-    elsif @is_column_type
+      @is_option_type = true
+    elsif @is_option_type
       if tok == 'timestamps'
-        @class.methods[@method_name].funcs[@func_name].add_column(tok)
-        @column_type = nil
-        @is_column = false
+        @class.methods[@method_name].funcs[@func_name].add_option(tok)
+        @is_option_type = false
+        @is_option = false
       else
-        @column_type = tok
-        @is_column = true
-      end
-      @is_column_type = false
-    elsif @is_column
-      if !@column_type.nil?
-        @class.methods[@method_name].funcs[@func_name].add_column(@column_type, tok)
-        @column_name = tok
+        @option_type = tok
         @is_option = true
-        @column_type = nil
-      elsif @option_name.nil?
+      end
+      @is_option_type = false
+    elsif @is_option
+      if !@option_type.nil?
+        @class.methods[@method_name].funcs[@func_name].add_option(@option_type, tok)
         @option_name = tok
-        @is_option = true
+        @is_option_option = true
+        @option_type = nil
+      elsif @option_option_name.nil?
+        @option_option_name = tok
+        @is_option_option = true
       end
+    elsif @is_func_option
+      if @func_option.nil?
+        @func_option = tok
+      else
+        @func_class.option.set_option(@func_option, tok)
+        @func_option = nil
+      end
+    elsif !@method_name.nil? && MigrationDefs::FuncName.has_key?(tok)
+      puts tok
+      @func_type = tok
+      @is_func = true
     elsif @is_func
       if !@func_type.nil?
+        puts tok
         @func_class = @class.methods[@method_name].add_func(@func_type, tok)
+        @is_func_option = true
         @func_name = tok
         @func_type = nil
       end
       @is_func = false
-    elsif !@method_name.nil? && MigrationDefs::FuncName.include?(tok)
-      @func_type = tok
-      @is_func = true
     elsif MigrationDefs::MethodName.include?(tok)
       @method_name = tok
       @class.add_method(tok)
@@ -104,9 +116,9 @@ class VisualMigrateRipper < Ripper::Filter
       @is_ancestors = false
       @is_super = false
     end
+    @is_func_option = false
     @is_option = false
-    @is_column = false
-    @is_func = false
+    @is_option_option = false
   end
   
   def on_do_block(tok, f)
@@ -114,11 +126,11 @@ class VisualMigrateRipper < Ripper::Filter
   end
   
   def on_lbrase(tok, f)
-    #@is_brase = true
+    @is_do = true
   end
   
   def on_rbrase(tok, f)
-    #@is_brase = false
+    @is_do = false
   end
   
   def on_comma(tok, f)
@@ -126,16 +138,22 @@ class VisualMigrateRipper < Ripper::Filter
   end
   
   def on_tstring_content(tok, f)
-    if @is_option && !@option_name.nil?
-      @class.methods[@method_name].funcs[@func_name].columns.last.set_option(@option_name, "'" + tok + "'")
-      @option_name = nil
+    if @is_option_option && !@option_option_name.nil?
+      @class.methods[@method_name].funcs[@func_name].options.last.set_option(@option_option_name, "'" + tok + "'")
+      @option_option_name = nil
+    elsif @is_func_option && !@func_option.nil?
+      @func_class.option.set_option(@func_option, "'" + tok + "'")
+      @func_option = nil
     end
   end
   
   def on_int(tok, f)
-    if @is_option && !@option_name.nil?
-      @class.methods[@method_name].funcs[@func_name].columns.last.set_option(@option_name, tok)
-      @option_name = nil
+    if @is_option_option && !@option_option_name.nil?
+      @class.methods[@method_name].funcs[@func_name].options.last.set_option(@option_option_name, tok)
+      @option_option_name = nil
+    elsif @is_func_option && !@func_option.nil?
+      @func_class.option.set_option(@func_option, tok)
+      @func_option = nil
     end
   end
 end

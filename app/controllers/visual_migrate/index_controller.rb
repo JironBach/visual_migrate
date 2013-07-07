@@ -3,8 +3,8 @@
 require_dependency "visual_migrate/application_controller"
 
 require 'pathname'
-require 'visual_migrate_ripper'
 require 'migration_defs'
+require 'class_filter'
 
 module VisualMigrate
   include ApplicationHelper
@@ -24,6 +24,12 @@ module VisualMigrate
     def show_tables
       @section_category = :tables
       @tables = ActiveRecord::Base.connection.tables
+    end
+    
+    def show_select_columns
+      render :text => self.class.helpers.columns_select(
+        '[methods][' + params[:method_name] + '][funcs][' + params[:func_name] + '][options][' + params[:row_num] + '][column]',
+        params[:table_name], params[:column_select])
     end
     
     def index
@@ -47,10 +53,11 @@ module VisualMigrate
         end
 
         @mi_lex = Ripper.lex(migration_content)
-        vm_ripper = VisualMigrateRipper.new migration_content
-        vm_ripper.parse
-        #@context = vm_ripper.get_str
-        @vm_ripper = vm_ripper
+        vm_filter = ClassFilter.new migration_content
+        vm_filter.parse
+        @context = vm_filter.class.get_str
+        puts @context.inspect
+        @vm_ripper = vm_filter
       end
       
       @edit_mode = 'edit_migration'
@@ -62,7 +69,7 @@ module VisualMigrate
       migration_class.parse_from_params params
       
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
-      @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params.inspect#
+      @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#migration_class.get_str#params.inspect#
       
       open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
       #@tmp = true
@@ -74,27 +81,33 @@ module VisualMigrate
     end
     
     def add_function
+      migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
+      migration_class.parse_from_params params
       if !params[:new_func].nil?
-        migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
-        migration_class.parse_from_params params
         params[:new_func].each do |p_key, p_val|
           if !migration_class.methods.has_key?(p_key)
-            migration_class.add_method(p_key)
+            migration_class.add_method(p_key) if p_val[:enable] == 'true'
           end
-          migration_class.methods.each do |m_key, m_val|#not DRY
-            m_val.add_func(p_val[:type], p_val[:name]) if (p_key == m_key) && !p_val[:name].blank? && (p_val[:delete] != 'true')
+          migration_class.methods.each do |m_key, m_val|
+            puts p_val.inspect
+            puts m_val.inspect
+            if !p_val[:new_table_name].blank?
+              m_val.add_func(p_val[:type], p_val[:new_table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
+            elsif !p_val[:table_name].blank?
+              m_val.add_func(p_val[:type], p_val[:table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
+            end
+            puts m_val.inspect
           end
         end
-
-        parsed_migration = RubyParser.new.parse(migration_class.get_str)
-        @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
-
-        open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
-          f.write(@context)
-        end
-        @tmp = true
       end
-      
+      parsed_migration = RubyParser.new.parse(migration_class.get_str)
+      @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
+
+      open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
+        f.write(@context)
+      end
+      @tmp = true
+
       edit_migration
     end
     

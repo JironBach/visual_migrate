@@ -1,4 +1,6 @@
-function deleteColumn(tableID) {
+//= #require jquery-ui-rails
+
+function deleteTableRow(tableID) {
     if(!confirm('Really delete?')) return;
 
     try {
@@ -19,3 +21,15 @@ function deleteColumn(tableID) {
     }
 }
 
+function updateColumnsDiv(table_id, update_div, method_name, func_name, row_num) {
+  jQuery.ajax({
+    url: "/visual-migrate/index/show_select_columns",
+    type: "POST",
+    async: true,
+    data: {"table_name" : table_id, "method_name" : method_name, "func_name" : func_name, "row_num" : row_num},
+    dataType: "html",
+    success: function(data) {
+      jQuery(document.getElementById(update_div)).html(data);
+    }
+  });
+}
