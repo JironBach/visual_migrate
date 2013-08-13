@@ -7,7 +7,7 @@
   <tr>
     <td colspan="3">
       <% @migration_method.funcs.each do |key, val| %>
-        <%= show_func(val) %> 
+        <%= show_func val %>
       <% end %>
     </td>
   </tr>
@@ -17,7 +17,7 @@
     <%= hidden_field_tag '[new_func][' + @migration_method.name + '][new_table_name]' %>
     <td colspan="3">
       <%#= button_to_function :add_function, 'javascript:popupwindow(add_new_func/' + params[:id] +'?methodName=' + @migration_method.name + ',"new function", "500" ,"300");' %>
-　　<input value="add function" onclick="javascript:popupwindow('/visual-migrate/dialog/add_new_func/<%= params[:id] %>?method_name=<%= @migration_method.name %>', 'new function', '500' ,'300');" type="button" />
+      <input value="add function" onclick="javascript:popupwindow('/visual-migrate/dialog/add_new_func/<%= params[:id] %>?method_name=<%= @migration_method.name %>', 'new function', '500' ,'300');" type="button" />
     </td>
   </tr>
 </table>

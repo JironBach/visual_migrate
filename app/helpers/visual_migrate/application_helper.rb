@@ -66,6 +66,8 @@ module VisualMigrate
         render :partial => "layouts/visual_migrate/func_drop_table"
       #elsif @migration_func.is_a? MigrationDefs::ChangeTableFunc
       #  render :partial => "layouts/visual_migrate/func_change_table"
+      elsif @migration_func.is_a? MigrationDefs::RenameTableFunc
+        render :partial => "layouts/visual_migrate/func_rename_table"
       end
     end
     

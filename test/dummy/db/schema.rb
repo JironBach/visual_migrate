@@ -11,14 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627131529) do
-
-  create_table "cds", :force => true do |t|
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.string   "chstr",      :default => "chstr", :null => false
-    t.float    "chfloat",    :default => 0.0,     :null => false
-  end
+ActiveRecord::Schema.define(:version => 20130813132754) do
 
   create_table "chtests", :primary_key => "vm", :force => true do |t|
     t.string   "ch_str",     :default => "chstr", :null => false
@@ -26,17 +19,17 @@ ActiveRecord::Schema.define(:version => 20130627131529) do
     t.datetime "updated_at",                      :null => false
   end
 
-  create_table "tests", :force => true do |t|
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.string   "str",        :default => "str_dev"
-    t.integer  "num",        :default => 2,         :null => false
-  end
-
   create_table "vms", :force => true do |t|
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
     t.string   "vmstr",      :default => "vmstr", :null => false
+  end
+
+  create_table "vmtests", :force => true do |t|
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.string   "str",        :default => "str_dev"
+    t.integer  "num",        :default => 2,         :null => false
   end
 
 end

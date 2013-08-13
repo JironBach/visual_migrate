@@ -2,7 +2,7 @@
 # To change this template, choose Tools | Templates
 # and open the template in the editor.
 
-require 'func_filter'
+require 'func_filters'
 
 class MethodFilter < Ripper::Filter
   attr_accessor :mclass, :method_str, :funcs_str, :func_filters
@@ -14,6 +14,7 @@ class MethodFilter < Ripper::Filter
     @funcs_str = Array.new
     @mclass = mclass
     @func_filters = Array.new
+    @is_method = false
     @is_func = false
     @is_do = false
   end
@@ -46,11 +47,10 @@ class MethodFilter < Ripper::Filter
       elsif @is_method
         index = 0
         @mclass.funcs.each do |key, val|
-          @func_filters << FuncFilter.new(@funcs_str[index], val)
+          @func_filters << FuncFilterFactory.get(val, @funcs_str[index], val)
           @func_filters.last.parse
           index += 1
         end
-        puts @func_filters.inspect
         @is_method = false
       end
     end
@@ -66,9 +66,16 @@ class MethodFilter < Ripper::Filter
       @func_type = nil
     elsif MigrationDefs::MethodName.include?(tok)
       @method_name = tok
-      #@class.add_method(tok)
     end
     
+    add_tok(tok)
+  end
+
+  def on_nl(tok, f)
+    if @is_func
+      @is_func = false
+    end
+
     add_tok(tok)
   end
   

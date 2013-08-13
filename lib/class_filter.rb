@@ -53,7 +53,6 @@ class ClassFilter < Ripper::Filter
         @methods << @class.add_method(@method_name)
         @is_method = false
       elsif @is_class
-        Rails.logger.debug methods_str.inspect
         index = 0
         @methods_str.each do |m|
           @method_filters << MethodFilter.new(m, @methods[index])

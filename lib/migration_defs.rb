@@ -121,6 +121,7 @@ module MigrationDefs
       when 'create_table'
         return CreateTableFunc.new(func_name)
       when 'rename_table'
+        return RenameTableFunc.new(func_name)
       when 'drop_table'
         return DropTableFunc.new(func_name)
       when 'add_column'
@@ -295,22 +296,6 @@ module MigrationDefs
     end
   end
 
-  class DropTableFunc < AbstractMigrationClass
-    attr_accessor :name
-    
-    def initialize(name)
-      @name = name
-    end
-    
-    def parse_from_params(parse_params)
-      return ''
-    end
-    
-    def get_str
-      'drop_table :' + @name + "\n"
-    end
-  end
-
 =begin
   class ChangeTableOption < AbstractMigrationClass
     attr_accessor :name, :column, :value
@@ -378,4 +363,40 @@ module MigrationDefs
   end
 =end
   
+  class RenameTableFunc < AbstractMigrationClass
+    attr_accessor :name, :new_name
+    
+    def initialize(name)
+      @name = name
+    end
+    
+    def add_new_name(new_name)
+      @new_name = new_name
+    end
+    
+    def parse_from_params(parse_params)
+      @new_name = parse_params[:new_table_name]
+    end
+    
+    def get_str
+      'rename_table :' + @name + ', :' + (@new_name.nil? ? '' : @new_name) + "\n"
+    end
+  end
+
+  class DropTableFunc < AbstractMigrationClass
+    attr_accessor :name
+    
+    def initialize(name)
+      @name = name
+    end
+    
+    def parse_from_params(parse_params)
+      return ''
+    end
+    
+    def get_str
+      'drop_table :' + @name + "\n"
+    end
+  end
+
 end
