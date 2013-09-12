@@ -1,0 +1,32 @@
+<%= form_tag do %>
+  <%= text_field_tag 'command_line', 'rake db:', :size => 50 %>
+  <br />
+  <input type="button" value="run" onclick="send_text();" ><br />
+<% end %>
+<br />
+<div id="text_result"></div>
+
+<script type="text/javascript">
+function send_text(){
+  ajax_post(document.getElementById("command_line").value);
+};
+
+function ajax_post(text){
+  $.ajax({
+    url: "/visual-migrate/index/run_command",
+    type: 'POST',
+    dataType: 'text',
+    data: {content:text},
+    success: function(data){
+      if(data.length>0){
+        $("#text_result").html(data);
+      } else {
+        $("#text_result").html("no data");
+      }
+    },
+    error: function(){
+      alert("AJAX failed");
+    }
+  })
+}
+</script>

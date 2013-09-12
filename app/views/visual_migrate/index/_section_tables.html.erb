@@ -1,0 +1,10 @@
+<h3>Tables</h3>
+<% if !(@tables.nil? || @tables.blank?) %>
+  <ul>
+    <% @tables.each do |t| %>
+     <%= (link_to t, :action => :select_table, :id => t) + raw('<br />') if t != 'schema_migrations'%>
+    <% end %>
+  </ul>
+<% else %>
+  tables not found.<br />
+<% end %>

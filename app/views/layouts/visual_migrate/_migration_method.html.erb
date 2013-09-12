@@ -1,0 +1,40 @@
+<table border="0" style="margin-left:2em;">
+  <tr>
+    <th width="80em">Method</th>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][name]', @migration_method.name, :readonly => true %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][enable]', true, @enable %>enable　</td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <% @migration_method.funcs.each do |key, val| %>
+        <%= show_func val %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <%= hidden_field_tag '[new_func][' + @migration_method.name + '][type]', '' %>
+    <%= hidden_field_tag '[new_func][' + @migration_method.name + '][table_name]'%>
+    <%= hidden_field_tag '[new_func][' + @migration_method.name + '][new_table_name]' %>
+    <td colspan="3">
+      <%#= button_to_function :add_function, 'javascript:popupwindow(add_new_func/' + params[:id] +'?methodName=' + @migration_method.name + ',"new function", "500" ,"300");' %>
+      <input value="add function" onclick="javascript:popupwindow('/visual-migrate/dialog/add_new_func/<%= params[:id] %>?method_name=<%= @migration_method.name %>', 'new function', '500' ,'300');" type="button" />
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  function popupwindow(url, title, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    var newFunc = window.showModalDialog(url, this,
+        'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+
+    var obj = document.forms["vm_edit"];
+    obj.method = "post";
+    obj.action = "/visual-migrate/index/add_function/<%= params[:id] %>";
+    //obj.target = "_blank";
+    obj.submit();
+}
+
+</script>
+

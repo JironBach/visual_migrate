@@ -1,0 +1,11 @@
+<%= @mi_lex.inspect %><br />
+
+<% if @migration_content.blank? %>
+  Select Migration.
+<% else %>
+  <%= form_tag :action => :direct_save, :id => params[:id] do %>
+    <%= text_area_tag(:migration, @migration_content, :size => "80x25") %>
+    <br />
+    <%= submit_tag 'save' %>
+  <% end %>
+<% end %>

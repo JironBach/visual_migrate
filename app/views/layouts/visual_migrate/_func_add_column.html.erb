@@ -1,0 +1,24 @@
+<table id="func_add_column" border="0" style="margin-left:2em;">
+  <tr>
+    <th width="80em">Func</th>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][name]', 'add_column', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][table_name]', @migration_func.name, :readonly => true %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][delete]', true, false %>delete　</td>
+  </tr>
+  <tr>
+    <th>Column</th>
+    <th>Type</th>
+    <% MigrationDefs::ColumnOption::Description.each_key do |key| %>
+      <th><%= key %></th>
+    <% end %>
+  </tr>
+  <tr>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][column]', @migration_func.column %></td>
+    <td><%= column_select '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][type]', @migration_func.type %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][limit]', @migration_func.option.limit if !@migration_func.option.nil? %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][default]', @migration_func.option.default if !@migration_func.option.nil? %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][null]', true, @migration_func.option.null if !@migration_func.option.nil? %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][precision]', @migration_func.option.precision if !@migration_func.option.nil? %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][columns][' + (@migration_func.name.blank? ? 'timestamps' : @migration_func.name) + '][scale]', @migration_func.option.scale if !@migration_func.option.nil? %></td>
+  </tr>
+</table>

@@ -1,0 +1,13 @@
+<%= raw nl2br @context if !@context.nil? %><br /><br />
+<%= params.inspect %><br /><br />
+<%= @mi_lex.inspect %><br /><br />
+
+<% if @vm_ripper.nil? %>
+  Select Migration.
+<% else %>
+  <%= form_tag({:action => :save_migration, :id => params[:id]}, {:name => :vm_edit}) do %>
+    <%= show_class @vm_ripper.class %>
+    <br />
+    <%= submit_tag 'save', :data => {:disable_with => "Sending..."} %>
+  <% end %>
+<% end %>
