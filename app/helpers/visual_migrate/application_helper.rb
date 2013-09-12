@@ -12,6 +12,15 @@ module VisualMigrate
       select_tag(id, options_for_select(MigrationDefs::FuncName.keys, select), :prompt => 'Select')
     end
  
+<<<<<<< HEAD
+=======
+=begin
+    def change_table_option_select(id, select = nil)
+      select_tag(id, options_for_select(MigrationDefs::ChangeTableOption::Description.keys, select))
+    end
+=end
+
+>>>>>>> 82ae52cd3e883a58ca8bdf3df31a5dfaf38a2d69
     def tables_select(table_id, select = nil)
       select_tag(table_id, options_for_select(ActiveRecord::Base.connection.tables, select), :prompt => 'Select or input')
     end
@@ -56,14 +65,22 @@ module VisualMigrate
       @migration_func = migration_func
       if @migration_func.is_a? MigrationDefs::CreateTableFunc
         render :partial => "layouts/visual_migrate/func_create_table"
+<<<<<<< HEAD
       elsif @migration_func.is_a? MigrationDefs::RenameTableFunc
         render :partial => "layouts/visual_migrate/func_rename_table"
+=======
+>>>>>>> 82ae52cd3e883a58ca8bdf3df31a5dfaf38a2d69
       elsif @migration_func.is_a? MigrationDefs::DropTableFunc
         render :partial => "layouts/visual_migrate/func_drop_table"
       #elsif @migration_func.is_a? MigrationDefs::ChangeTableFunc
       #  render :partial => "layouts/visual_migrate/func_change_table"
+<<<<<<< HEAD
       elsif @migration_func.is_a? MigrationDefs::AddColumnFunc
         render :partial => "layouts/visual_migrate/func_add_column"
+=======
+      elsif @migration_func.is_a? MigrationDefs::RenameTableFunc
+        render :partial => "layouts/visual_migrate/func_rename_table"
+>>>>>>> 82ae52cd3e883a58ca8bdf3df31a5dfaf38a2d69
       end
     end
     
@@ -76,5 +93,15 @@ module VisualMigrate
       select_tag(id, options_for_select(MigrationDefs::ColumnType.keys, select))
     end
     
+<<<<<<< HEAD
+=======
+=begin
+    def show_change_table_options(options)
+      @options = options
+      render :partial => "layouts/visual_migrate/change_table_options"
+    end
+=end
+    
+>>>>>>> 82ae52cd3e883a58ca8bdf3df31a5dfaf38a2d69
   end
 end

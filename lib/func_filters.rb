@@ -181,3 +181,4 @@ end
 class AddColumnFuncFilter < CreateTableFuncFilter
   #ここから
 end
+
