@@ -13,7 +13,7 @@ class FuncFilterFactory
     elsif func.is_a? MigrationDefs::DropTableFunc
       return DropTableFuncFilter.new(src, fclass)
     elsif func.is_a? MigrationDefs::AddColumnFunc
-      return AddCulumnFuncFilter.new(src, fclass)
+      return AddColumnFuncFilter.new(src, fclass)
     elsif func.is_a? 'rename_column'
     elsif func.is_a? 'change_column' 
     elsif func.is_a? 'remove_column'
@@ -178,3 +178,6 @@ end
 class DropTableFuncFilter < CreateTableFuncFilter
 end
 
+class AddColumnFuncFilter < CreateTableFuncFilter
+  #ここから
+end

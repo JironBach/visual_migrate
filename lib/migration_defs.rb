@@ -125,6 +125,7 @@ module MigrationDefs
       when 'drop_table'
         return DropTableFunc.new(func_name)
       when 'add_column'
+        return AddColumnFunc.new(func_name)
       when 'rename_column'
       when 'change_column' 
       when 'remove_column'
@@ -379,7 +380,7 @@ module MigrationDefs
     end
     
     def get_str
-      'rename_table :' + @name + ', :' + (@new_name.nil? ? '' : @new_name) + "\n"
+      'rename_table :' + @name + (@new_name.nil? ? '' : ', :' + @new_name) + "\n"
     end
   end
 
@@ -396,6 +397,46 @@ module MigrationDefs
     
     def get_str
       'drop_table :' + @name + "\n"
+    end
+  end
+
+  class AddColumnFunc < AbstractMigrationClass
+    attr_accessor :column
+    
+    def initialize(name)
+      @name = name
+      @option = ColumnOption.new
+    end
+    
+    def add_column(type, name = '')
+      Column.new(type, name)
+    end
+    
+    def parse_from_params(parse_params)
+      if parse_params[:type] != 'timestamps'
+        @column = add_column(parse_params[:type], parse_params[:column])
+        @column.set_option 'limit', parse_params[:limit]
+        @column.set_option 'default', parse_params[:default]
+        @column.set_option 'null', parse_params[:null]
+        @column.set_option 'precision', parse_params[:precision]
+        @column.set_option 'scale', parse_params[:scale]
+      else
+        add_column(parse_params[:type])
+      end
+    end
+    
+    def get_str
+      if @column.type != 'timestamps'
+        return 'add_column :' + @name + ', :' + @column.name + ', :' + @column.type +
+              ', :limit => ' + @column.limit +
+              ', :default' + @column.default +
+              ', :null' + @column.null +
+              ', :precision' + @column.precision +
+              ', :scale' + @column.scale +
+              "\n"
+      else
+        return "add_column :timestamps\n"
+      end
     end
   end
 
