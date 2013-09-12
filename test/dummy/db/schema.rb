@@ -25,11 +25,4 @@ ActiveRecord::Schema.define(:version => 20130813135227) do
     t.string   "vmstr",      :default => "vmstr", :null => false
   end
 
-  create_table "vmtests", :force => true do |t|
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.string   "str",        :default => "str_dev"
-    t.integer  "num",        :default => 2,         :null => false
-  end
-
 end
