@@ -6,5 +6,5 @@ test/dummy/log/*.log
 test/dummy/tmp/
 test/dummy/.sass-cache
 test/dummy/vendor/bundle/
-test/dummy/config/database.yml
+#test/dummy/config/database.yml
 
