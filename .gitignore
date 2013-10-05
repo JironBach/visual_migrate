@@ -1,10 +1,15 @@
 .bundle/
+Gemfile.lock
 log/*.log
 pkg/
 test/dummy/db/*.sqlite3
 test/dummy/log/*.log
+test/dummy/Gemfile.lock
 test/dummy/tmp/
 test/dummy/.sass-cache
+test/dummy/.ruby-version
 test/dummy/vendor/bundle/
 #test/dummy/config/database.yml
+
+/*sublime*
 

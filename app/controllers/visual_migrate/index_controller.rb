@@ -49,14 +49,13 @@ module VisualMigrate
         
         migration_content = ''
         open(migration_filename, 'r') do |f|
-          migration_content = f.read
+          @migration_content = f.read
         end
 
-        @mi_lex = Ripper.lex(migration_content)
-        vm_filter = ClassFilter.new migration_content
+        @mi_lex = Ripper.lex(@migration_content)
+        vm_filter = ClassFilter.new @migration_content
         vm_filter.parse
         @context = vm_filter.class.get_str
-        puts @context.inspect
         @vm_ripper = vm_filter
       end
       

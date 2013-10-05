@@ -86,30 +86,31 @@ module MigrationDefs
       return nil if !MethodName.include? name
       
       @name = name
-      @funcs = Hash.new
+      @funcs = Array.new
     end
 
     def add_func(name, func_name, *func_options)
-      @funcs[func_name] = FuncFactory::get(name, func_name, func_options)
+      @funcs << FuncFactory::get(name, func_name, func_options)
     end
     
     def parse_from_params(parse_params)
+      puts parse_params[:funcs].inspect
       return '' if parse_params[:funcs].nil?
       
       parse_params[:funcs].each do |key, val|
         add_func(val[:name], val[:table_name]) if val[:delete] != 'true'
       end
       parse_params[:funcs].each do |p_key, p_val|#not DRY
-        @funcs.each do |m_key, m_val|
-          m_val.parse_from_params(p_val) if p_key == m_key
+        @funcs.each do |func|
+          func.parse_from_params(p_val)
         end
       end
     end
     
     def get_str
       result = 'def ' + @name + "\n"
-      @funcs.each do |key, val|
-        result += val.get_str if !val.nil?
+      @funcs.each do |func|
+        result += func.get_str if !func.nil?
       end
       result += "end\n"
     end
@@ -127,7 +128,7 @@ module MigrationDefs
       when 'add_column'
         return AddColumnFunc.new(func_name)
       when 'rename_column'
-      when 'change_column' 
+      when 'change_column'
       when 'remove_column'
       when 'change_column_default'
       when 'add_index'
@@ -163,7 +164,9 @@ module MigrationDefs
     def get_str
       result = ''
       result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
-      result += ', :default => ' + @default.to_s if !@default.blank?
+      if !@default.blank?
+        result += ", :default => '" + @default.to_s + "'" 
+      end
       result += ', :null => ' + @null.to_s if !@null
       result += ', :precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
       result += ', :scale => ' + @scale.to_s if !@scale.nil? && @scale != 0
@@ -401,11 +404,10 @@ module MigrationDefs
   end
 
   class AddColumnFunc < AbstractMigrationClass
-    attr_accessor :column
+    attr_accessor :name, :column
     
     def initialize(name)
       @name = name
-      @option = ColumnOption.new
     end
     
     def add_column(type, name = '')
@@ -426,16 +428,21 @@ module MigrationDefs
     end
     
     def get_str
-      if @column.type != 'timestamps'
-        return 'add_column :' + @name + ', :' + @column.name + ', :' + @column.type +
-              ', :limit => ' + @column.limit +
-              ', :default' + @column.default +
-              ', :null' + @column.null +
-              ', :precision' + @column.precision +
-              ', :scale' + @column.scale +
-              "\n"
+      puts @name
+      if @column.nil?
+          return 'add_column :' + @name + "\n"
       else
-        return "add_column :timestamps\n"
+        if @column.type != 'timestamps'
+          return 'add_column :' + @name + ', :' + @column.name + ', :' + @column.type +
+                ', :limit => ' + @column.limit +
+                ', :default' + @column.default +
+                ', :null' + @column.null +
+                ', :precision' + @column.precision +
+                ', :scale' + @column.scale +
+                "\n"
+        else
+          return 'add_column:' + @name + ", :timestamps\n"
+        end
       end
     end
   end
