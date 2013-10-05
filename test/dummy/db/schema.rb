@@ -11,17 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924132358) do
+ActiveRecord::Schema.define(:version => 20130813135227) do
 
   create_table "chtests", :primary_key => "vm", :force => true do |t|
     t.string   "ch_str",     :default => "chstr", :null => false
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
-  end
-
-  create_table "sakes", :force => true do |t|
-    t.string "commentator", :limit => 16,  :default => "", :null => false
-    t.string "comment",     :limit => 128, :default => "", :null => false
   end
 
   create_table "vms", :force => true do |t|
