@@ -1,7 +1,5 @@
 VisualMigrate::Engine.routes.draw do
-  root :to => "index#index"
-  
-  #match '/:controller(/:action(/:id))', :controller => /visual_migrate\/[^\/]+/
-  match 'index(/:action(/:id))', :controller => :index
-  match 'dialog(/:action(/:id))', :controller => :dialog
+  root :to => 'index#index' #Why needs?
+  #match ':controller(/:action(/:id))(.:format)'
+  resource 'index'
 end

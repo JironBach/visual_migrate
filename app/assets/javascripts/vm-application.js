@@ -23,7 +23,7 @@ function deleteTableRow(tableID) {
 
 function updateColumnsDiv(table_id, update_div, method_name, func_name, row_num) {
   jQuery.ajax({
-    url: "/visual-migrate/index/show_select_columns",
+    url: "/visual_migrate/index/show_select_columns",
     type: "POST",
     async: true,
     data: {"table_name" : table_id, "method_name" : method_name, "func_name" : func_name, "row_num" : row_num},
