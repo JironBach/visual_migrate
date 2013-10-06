@@ -6,6 +6,8 @@ visual-migrate brings a easy to create or modify migration files for Ruby on Rai
 ### Install
 * Add "gem 'visual_migrate', :git => 'git://github.com/JironBach/visual_migrate.git'" to Gemfile
 * Add "mount VisualMigrate::Engine => "/visual_migrate"" to config/routes.rb
+* rake visual_migrate:install:migrations
+* rake db:migrate
 
 ### Usage
 * Access "http://localhost:3000/visual_migrate/"

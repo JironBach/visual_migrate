@@ -67,5 +67,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-#gem 'visual_migrate', :git => 'git@git.mydns.jp:/JironBach/visual_migrate.git' #'git://github.com/JironBach/visual_migrate.git'
+gem 'devise', branch: 'rails4'
+#gem 'rails_admin', branch: 'rails-4'
+gem 'activeadmin', github: 'gregbell/active_admin'
 

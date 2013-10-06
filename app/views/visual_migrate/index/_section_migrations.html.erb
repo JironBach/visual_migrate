@@ -2,7 +2,7 @@
 <% if !(@migration_files.nil? || @migration_files.blank?) %>
   <ul>
     <% @migration_files.reverse.each do |mf| %>
-     <% if SchemaMigration.where(:version => mf.basename.to_s[0, 14]).first.blank? %>
+     <% if VisualMigrate::SchemaMigration.where(:version => mf.basename.to_s[0, 14]).first.blank? %>
       <%= link_to mf.basename, :action => @edit_mode, :id => mf.basename('.rb') %>
      <% else %>
       <%= mf.basename %>

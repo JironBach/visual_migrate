@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130916114647) do
+ActiveRecord::Schema.define(version: 20131006135044) do
 
   create_table "cds", force: true do |t|
     t.datetime "created_at"
@@ -34,6 +34,15 @@ ActiveRecord::Schema.define(version: 20130916114647) do
   create_table "sakes", force: true do |t|
     t.string "commentator", limit: 16,  default: "", null: false
     t.string "comment",     limit: 128, default: "", null: false
+  end
+
+  create_table "test_tables", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "visual_migrate_schema_migrations", force: true do |t|
+    t.string "version", null: false
   end
 
   create_table "vms", force: true do |t|

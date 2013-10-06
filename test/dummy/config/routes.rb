@@ -1,4 +1,3 @@
 Rails.application.routes.draw do
-
-  mount VisualMigrate::Engine => "/visual_migrate"
+  mount VisualMigrate::Engine, at: "/visual_migrate"
 end
