@@ -1,0 +1,550 @@
+find_executable: checking for pg_config... -------------------- yes
+
+--------------------
+
+have_header: checking for libpq-fe.h... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib      -lruby-static  -lpthread -ldl -lobjc "
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"clang -E -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe   conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libpq-fe.h>
+/* end */
+
+--------------------
+
+have_header: checking for libpq/libpq-fs.h... -------------------- yes
+
+"clang -E -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe   conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <libpq/libpq-fs.h>
+/* end */
+
+--------------------
+
+have_library: checking for PQconnectdb() in -lpq... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib      -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQconnectdb'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQconnectdb; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQconnectdb; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib      -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQconnectdb' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQconnectdb(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQconnectdb(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQconnectionUsedPassword()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQconnectionUsedPassword'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQconnectionUsedPassword; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQconnectionUsedPassword; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQconnectionUsedPassword' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQconnectionUsedPassword(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQconnectionUsedPassword(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQisthreadsafe()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQisthreadsafe'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQisthreadsafe; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQisthreadsafe; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQisthreadsafe' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQisthreadsafe(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQisthreadsafe(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQprepare()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQprepare'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQprepare; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQprepare; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQprepare' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQprepare(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQprepare(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQexecParams()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQexecParams'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQexecParams; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQexecParams; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQexecParams' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQexecParams(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQexecParams(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQescapeString()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQescapeString'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQescapeString; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQescapeString; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQescapeString' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQescapeString(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQescapeString(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQescapeStringConn()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQescapeStringConn'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQescapeStringConn; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQescapeStringConn; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQescapeStringConn' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQescapeStringConn(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQescapeStringConn(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for lo_create()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'lo_create'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))lo_create; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))lo_create; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'lo_create' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { lo_create(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { lo_create(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for pg_encoding_to_char()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'pg_encoding_to_char'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))pg_encoding_to_char; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))pg_encoding_to_char; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'pg_encoding_to_char' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { pg_encoding_to_char(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { pg_encoding_to_char(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_func: checking for PQsetClientEncoding()... -------------------- yes
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:57: error: use of undeclared identifier 'PQsetClientEncoding'
+int t(void) { void ((*volatile p)()); p = (void ((*)()))PQsetClientEncoding; return 0; }
+                                                        ^
+1 error generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { void ((*volatile p)()); p = (void ((*)()))PQsetClientEncoding; return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+"clang -o conftest -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe  conftest.c  -L. -L/Users/js/.rbenv/versions/2.0.0-p195/lib -L. -L'/Users/js/.rbenv/versions/2.0.0-p195/lib'  -L/usr/local/lib -L/usr/lib     -lpq  -lruby-static -lpq  -lpthread -ldl -lobjc "
+conftest.c:5:15: warning: implicit declaration of function 'PQsetClientEncoding' is invalid in C99 [-Wimplicit-function-declaration]
+int t(void) { PQsetClientEncoding(); return 0; }
+              ^
+1 warning generated.
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int t(void) { PQsetClientEncoding(); return 0; }
+ 6: int main(int argc, char **argv)
+ 7: {
+ 8:   if (argc > 1000000) {
+ 9:     printf("%p", &t);
+10:   }
+11: 
+12:   return 0;
+13: }
+/* end */
+
+--------------------
+
+have_header: checking for unistd.h... -------------------- yes
+
+"clang -E -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/x86_64-darwin12.4.0 -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0/ruby/backward -I/Users/js/.rbenv/versions/2.0.0-p195/include/ruby-2.0.0 -I. -I'/Users/js/.rbenv/versions/2.0.0-p195/include'  -D_XOPEN_SOURCE -D_DARWIN_C_SOURCE -D_DARWIN_UNLIMITED_SELECT -D_REENTRANT   -I/usr/include  -O3 -Wno-error=shorten-64-to-32  -pipe   conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <unistd.h>
+/* end */
+
+--------------------
+
+extconf.h is:
+/* begin */
+ 1: #ifndef EXTCONF_H
+ 2: #define EXTCONF_H
+ 3: #define HAVE_LIBPQ_FE_H 1
+ 4: #define HAVE_LIBPQ_LIBPQ_FS_H 1
+ 5: #define HAVE_PQCONNECTIONUSEDPASSWORD 1
+ 6: #define HAVE_PQISTHREADSAFE 1
+ 7: #define HAVE_PQPREPARE 1
+ 8: #define HAVE_PQEXECPARAMS 1
+ 9: #define HAVE_PQESCAPESTRING 1
+10: #define HAVE_PQESCAPESTRINGCONN 1
+11: #define HAVE_LO_CREATE 1
+12: #define HAVE_PG_ENCODING_TO_CHAR 1
+13: #define HAVE_PQSETCLIENTENCODING 1
+14: #define HAVE_UNISTD_H 1
+15: #endif
+/* end */
+
