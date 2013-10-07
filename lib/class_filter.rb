@@ -20,7 +20,7 @@ class ClassFilter < Ripper::Filter
     @is_method = false
   end
   
-  def add_tok(tok)
+  def add_tok tok
     if @is_method
       @methods_str[-1] += tok
     elsif @is_class
@@ -29,7 +29,7 @@ class ClassFilter < Ripper::Filter
   end
   
   def on_default(event, tok, f)
-    add_tok(tok)
+    add_tok tok
   end
 
   def on_kw(tok, f)
@@ -42,7 +42,7 @@ class ClassFilter < Ripper::Filter
       @is_do = true
     end
     
-    add_tok(tok)
+    add_tok tok
 
     if tok == 'end'
       if @is_do
@@ -70,7 +70,7 @@ class ClassFilter < Ripper::Filter
       @class.add_method(tok)
     end
 
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_const(tok, f)
@@ -82,7 +82,7 @@ class ClassFilter < Ripper::Filter
       @class_name = tok
     end
 
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_op(tok, f)
@@ -94,7 +94,7 @@ class ClassFilter < Ripper::Filter
       end
     end
 
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_nl(tok, f)
@@ -105,22 +105,22 @@ class ClassFilter < Ripper::Filter
       @is_super = false
     end
 
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_do_block(tok, f)
     @is_do = true
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_lbrase(tok, f)
     @is_do = true
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_rbrase(tok, f)
     @is_do = false
-    add_tok(tok)
+    add_tok tok
   end
   
 end

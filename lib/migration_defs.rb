@@ -94,7 +94,6 @@ module MigrationDefs
     end
     
     def parse_from_params(parse_params)
-      puts parse_params[:funcs].inspect
       return '' if parse_params[:funcs].nil?
       
       parse_params[:funcs].each do |key, val|
@@ -299,73 +298,6 @@ module MigrationDefs
       result += "end\n"
     end
   end
-
-=begin
-  class ChangeTableOption < AbstractMigrationClass
-    attr_accessor :name, :column, :value
-    
-    Description = {
-      'index' => 'インデックス',
-      'change' => 'カラムを変更',
-      'change_default' => 'カラムのデフォルト値を変更',
-      'rename' => 'カラムの名前を変更',
-      'remove' => 'カラムを削除',
-      'remove_references' => 'リファレンスの削除',
-      'remove_index' => 'インデックスの削除',
-      'remove_timestamps' => 'タイムスタンプの削除',
-    }
-
-    def initialize(name, column, value = nil)
-      return nil if !Description.has_key?(name)
-      
-      @name = name
-      @column = column
-      @value = value
-    end
-    
-    def get_str
-      result = 't.' + @name + ' :' + @column
-      result += ', :' + @value if !@value.blank?
-      result
-    end
-  end
-
-  class ChangeTableFunc < AbstractMigrationClass
-    attr_accessor :name, :option, :options
-    
-    def initialize(name)
-      @name = name
-      #@option = {:bulk => false}
-      @options = Array.new
-    end
-    
-    def add_option(option, column, value = nil)
-      @options << ChangeTableOption.new(option, column, value)
-      @options.last
-    end
-    
-    def parse_from_params(parse_params)
-      return '' if parse_params.nil? || parse_params[:options].nil?
-      
-      parse_params[:options].each do |key, val|
-        puts val
-        next if val.nil?
-        
-        add_option(val[:name], val[:column], val[:value])
-      end
-    end
-    
-    def get_str
-      result = 'change_table :' + @name
-      #result += @option.get_str if !@option.nil?
-      result += " do |t|\n"
-      @options.each do |opt|
-        result += opt.get_str + "\n" if !opt.nil?
-      end
-      result += "end\n"
-    end
-  end
-=end
   
   class RenameTableFunc < AbstractMigrationClass
     attr_accessor :name, :new_name
@@ -383,7 +315,7 @@ module MigrationDefs
     end
     
     def get_str
-      'rename_table :' + @name + (@new_name.nil? ? '' : ', :' + @new_name) + "\n"
+      'rename_table :' + @name + (@new_name.blank? ? '' : ', :' + @new_name) + "\n"
     end
   end
 
@@ -428,7 +360,6 @@ module MigrationDefs
     end
     
     def get_str
-      puts @name
       if @column.nil?
           return 'add_column :' + @name + "\n"
       else
