@@ -43,7 +43,7 @@ module VisualMigrate
         if !@tmp
           migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
         else
-          migration_filename = Rails.root.to_s + '/tmp/visual-migrate_tmp.rb'
+          migration_filename = '/tmp/visual-migrate_tmp.rb'
         end
         @tmp = false
         
@@ -72,7 +72,7 @@ module VisualMigrate
       
       open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
       #@tmp = true
-      #open(Rails.root.to_s + '/tmp/visual-migrate_tmp.rb', 'w') do |f|
+      #open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
         f.write(@context)
       end
 
@@ -102,7 +102,7 @@ module VisualMigrate
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
       @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
 
-      open(Rails.root.to_s + '/tmp/visual-migrate_tmp.rb', 'w') do |f|
+      open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
         f.write(@context)
       end
       @tmp = true
