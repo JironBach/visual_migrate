@@ -88,14 +88,11 @@ module VisualMigrate
             migration_class.add_method(p_key) if p_val[:enable] == 'true'
           end
           migration_class.methods.each do |m_key, m_val|
-            puts p_val.inspect
-            puts m_val.inspect
             if !p_val[:new_table_name].blank?
               m_val.add_func(p_val[:type], p_val[:new_table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
             elsif !p_val[:table_name].blank?
               m_val.add_func(p_val[:type], p_val[:table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
             end
-            puts m_val.inspect
           end
         end
       end

@@ -5,15 +5,16 @@
 require 'migration_defs'
 
 class FuncFilterFactory
-  def self.get(func, src, fclass)
+  def self.get(func, src)
+    puts '-----' + func.inspect + '-----'
     if func.is_a? MigrationDefs::CreateTableFunc
-      return CreateTableFuncFilter.new(src, fclass)
+      return CreateTableFuncFilter.new(src, func)
     elsif func.is_a? MigrationDefs::RenameTableFunc
-      return RenameTableFuncFilter.new(src, fclass)
+      return RenameTableFuncFilter.new(src, func)
     elsif func.is_a? MigrationDefs::DropTableFunc
-      return DropTableFuncFilter.new(src, fclass)
+      return DropTableFuncFilter.new(src, func)
     elsif func.is_a? MigrationDefs::AddColumnFunc
-      return AddColumnFuncFilter.new(src, fclass)
+      return AddColumnFuncFilter.new(src, func)
     elsif func.is_a? 'rename_column'
     elsif func.is_a? 'change_column'
     elsif func.is_a? 'remove_column'
@@ -52,7 +53,7 @@ class CreateTableFuncFilter < Ripper::Filter
   end
   
   def on_default(event, tok, f)
-    add_tok(tok)
+    add_tok tok
   end
 
   def on_kw(tok, f)
@@ -69,7 +70,7 @@ class CreateTableFuncFilter < Ripper::Filter
         @func_option = nil
       end
     end
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_ident(tok, f)
@@ -97,28 +98,28 @@ class CreateTableFuncFilter < Ripper::Filter
     elsif @is_column_option
       @column_option = tok
     end
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_nl(tok, f)
     @is_column = false
     @is_column_option = false
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_do_block(tok, f)
     @is_do = true
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_lbrase(tok, f)
     @is_do = true
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_rbrase(tok, f)
     @is_do = false
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_tstring_content(tok, f)
@@ -130,12 +131,12 @@ class CreateTableFuncFilter < Ripper::Filter
       @func_option = nil
     end
     @is_tstring_content = true
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_tstring_beg(tok, f)
     @is_tstring_content = false
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_tstring_end(tok, f)
@@ -152,7 +153,7 @@ class CreateTableFuncFilter < Ripper::Filter
       @fclass.option.set_option(@func_option, tok)
       @func_option = nil
     end
-    add_tok(tok)
+    add_tok tok
   end
 
 end
@@ -168,12 +169,12 @@ class RenameTableFuncFilter < CreateTableFuncFilter
   end
   
   def on_ident(tok, f)
-    puts '-----' + tok + '-----'
     if @is_comma
+      @new_name = tok
       @fclass.add_new_name tok
       @is_comma = false
     end
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_comma(tok, f)

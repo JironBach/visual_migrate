@@ -19,7 +19,7 @@ class MethodFilter < Ripper::Filter
     @is_do = false
   end
   
-  def add_tok(tok)
+  def add_tok tok
     if @is_func
       @funcs_str[-1] += tok
     elsif @is_method
@@ -28,7 +28,7 @@ class MethodFilter < Ripper::Filter
   end
   
   def on_default(event, tok, f)
-    add_tok(tok)
+    add_tok tok
   end
 
   def on_kw(tok, f)
@@ -37,22 +37,24 @@ class MethodFilter < Ripper::Filter
       @is_func = false
     end
     
-    add_tok(tok)
-      
     if tok == 'end'
       if @is_do
         @is_do = false
+        add_tok tok
       elsif @is_func
         @is_func = false
+        add_tok tok
       elsif @is_method
         index = 0
         @mclass.funcs.each do |func|
-          @func_filters << FuncFilterFactory.get(func, @funcs_str[index], func)
+          puts '-----' + func.inspect + '-----'
+          @func_filters << FuncFilterFactory.get(func, @funcs_str[index])
           @func_filters.last.parse
           index += 1
         end
         @is_method = false
       end
+      add_tok tok
     end
   end
   
@@ -67,16 +69,21 @@ class MethodFilter < Ripper::Filter
     elsif MigrationDefs::MethodName.include?(tok)
       @method_name = tok
     end
-    add_tok(tok)
+    add_tok tok
   end
 
+  def on_nl(tok, f)
+    @is_func = false
+    add_tok tok
+  end
+  
   def on_do_block(tok, f)
     if !@is_func
       @is_func = true
     elsif !@is_do
       @is_do = true
     end
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_lbrase(tok, f)
@@ -85,7 +92,7 @@ class MethodFilter < Ripper::Filter
     elsif !@is_do
       @is_do = true
     end
-    add_tok(tok)
+    add_tok tok
   end
   
   def on_rbrase(tok, f)
@@ -94,7 +101,7 @@ class MethodFilter < Ripper::Filter
     elsif @is_func
       @is_func = false
     end
-    add_tok(tok)
+    add_tok tok
   end
   
 end
