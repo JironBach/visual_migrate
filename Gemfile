@@ -27,6 +27,7 @@ gem "mysql2", "0.3.11"
 gem "ruby-mysql"
 gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"
+gem "systemu"
 
 gem 'activerecord'
 

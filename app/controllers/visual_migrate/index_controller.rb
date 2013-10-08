@@ -43,7 +43,7 @@ module VisualMigrate
         if !@tmp
           migration_filename = Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb'
         else
-          migration_filename = '/tmp/visual-migrate_tmp.rb'
+          migration_filename = Rails.root.to_s + '/tmp/visual-migrate_tmp.rb'
         end
         @tmp = false
         
@@ -72,7 +72,7 @@ module VisualMigrate
       
       open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
       #@tmp = true
-      #open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
+      #open(Rails.root.to_s + '/tmp/visual-migrate_tmp.rb', 'w') do |f|
         f.write(@context)
       end
 
@@ -88,21 +88,18 @@ module VisualMigrate
             migration_class.add_method(p_key) if p_val[:enable] == 'true'
           end
           migration_class.methods.each do |m_key, m_val|
-            puts p_val.inspect
-            puts m_val.inspect
             if !p_val[:new_table_name].blank?
               m_val.add_func(p_val[:type], p_val[:new_table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
             elsif !p_val[:table_name].blank?
               m_val.add_func(p_val[:type], p_val[:table_name]) if (p_key == m_key) && (p_val[:delete] != 'true')
             end
-            puts m_val.inspect
           end
         end
       end
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
       @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
 
-      open('/tmp/visual-migrate_tmp.rb', 'w') do |f|
+      open(Rails.root.to_s + '/tmp/visual-migrate_tmp.rb', 'w') do |f|
         f.write(@context)
       end
       @tmp = true
@@ -141,16 +138,6 @@ module VisualMigrate
       direct_edit
     end
     
-    def modify_table
-      show_tables
-      
-      render :modify_table
-    end
-    
-    def add_migration
-      modify_table
-    end
-    
     def command_line
       show_migrations
       
@@ -158,20 +145,23 @@ module VisualMigrate
     end
 
     def run_command
-      show_migrations
-      
-      command = params[:content]
-      if (command =~ /rake .*/) || (command =~ /rails .*/) || (command =~ /git .*/)
+      command = params[:command_line]
+      if (command =~ /^rake .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)
         begin
-          content = `#{command}`
+          status, stdout, stderr = systemu command
+          if stderr.blank?
+            @run_result = stdout
+          else
+            @run_result = stdout + '<br /><font color="red">' + stderr + '</font>'
+          end
         rescue
-          content = '<font color="red">failed</font>'
+          @run_result = '<font color="red">failed</font>'
         end
       else
-        content = '<font color="red">available commands are "rake", "rails" and "git".</font>'
+        @run_result = '<font color="red">available commands are "rake", "rails" and "git".</font>'
       end
 
-      render :text => self.class.helpers.nl2br(content)
+      command_line
     end
   
   end

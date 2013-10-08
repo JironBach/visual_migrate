@@ -1,9 +1,11 @@
-<%= form_tag do %>
+<%= form_tag(action: :run_command) do %>
   <%= text_field_tag 'command_line', 'rake db:', :size => 50 %>
   <br />
-  <input type="button" value="run" onclick="send_text();" ><br />
+  <!--input type="button" value="run" onclick="send_text();" ><br /-->
+  <%= submit_tag "run" %><br />
 <% end %>
 <br />
+<%= raw(nl2br @run_result) if !@run_result.nil? %><br />
 <div id="text_result"></div>
 
 <script type="text/javascript">
@@ -16,7 +18,7 @@ function ajax_post(text){
     url: "/visual_migrate/index/run_command",
     type: 'POST',
     dataType: 'text',
-    data: {content:text},
+    data: {command_line:text},
     success: function(data){
       if(data.length>0){
         $("#text_result").html(data);
