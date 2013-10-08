@@ -29,5 +29,5 @@ gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"
 gem "systemu"
 
-gem 'activerecord'
+gem 'rails', '~> 4.0.0'
 
