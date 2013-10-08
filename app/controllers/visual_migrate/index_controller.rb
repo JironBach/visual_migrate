@@ -147,16 +147,16 @@ module VisualMigrate
     def run_command
       command = params[:command_line]
       if (command =~ /^rake .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)
-        begin
+        #begin
           status, stdout, stderr = systemu command
           if stderr.blank?
             @run_result = stdout
           else
             @run_result = stdout + '<br /><font color="red">' + stderr + '</font>'
           end
-        rescue
-          @run_result = '<font color="red">failed</font>'
-        end
+        #rescue
+        #  @run_result = '<font color="red">failed</font>'
+        #end
       else
         @run_result = '<font color="red">available commands are "rake", "rails" and "git".</font>'
       end
