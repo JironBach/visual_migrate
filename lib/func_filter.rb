@@ -169,12 +169,21 @@ class RenameTableFuncFilter < CreateTableFuncFilter
   end
   
   def on_ident(tok, f)
+<<<<<<< HEAD
     if @is_comma
       @new_name = tok
       @fclass.add_new_name tok
       @is_comma = false
     end
     add_tok tok
+=======
+    puts '-----' + tok + '-----'
+    if @is_comma
+      @fclass.add_new_name tok
+      @is_comma = false
+    end
+    add_tok(tok)
+>>>>>>> RoR4対応。
   end
   
   def on_comma(tok, f)

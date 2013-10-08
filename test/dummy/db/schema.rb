@@ -18,6 +18,13 @@ ActiveRecord::Schema.define(version: 20131006135044) do
     t.datetime "updated_at"
     t.string   "commentator", limit: 64, null: false
     t.text     "comment",                null: false
+<<<<<<< HEAD
+=======
+  end
+
+  create_table "visual_migrate_schema_migrations", force: true do |t|
+    t.string "version", null: false
+>>>>>>> RoR4対応。
   end
 
 end
