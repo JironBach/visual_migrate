@@ -47,15 +47,15 @@ class MethodFilter < Ripper::Filter
       elsif @is_method
         index = 0
         @mclass.funcs.each do |func|
-          puts '-----' + func.inspect + '-----'
           @func_filters << FuncFilterFactory.get(func, @funcs_str[index])
           @func_filters.last.parse
           index += 1
         end
         @is_method = false
       end
-      add_tok tok
     end
+
+    add_tok tok
   end
   
   def on_ident(tok, f)
@@ -72,11 +72,6 @@ class MethodFilter < Ripper::Filter
     add_tok tok
   end
 
-  def on_nl(tok, f)
-    @is_func = false
-    add_tok tok
-  end
-  
   def on_do_block(tok, f)
     if !@is_func
       @is_func = true

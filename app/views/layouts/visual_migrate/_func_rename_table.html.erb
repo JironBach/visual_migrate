@@ -1,5 +1,4 @@
 <table id="func_rename_table" border="0" style="margin-left:2em;">
-  <%= @migration_func.inspect %>
   <tr>
     <th width="80em">Func</th>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][name]', 'rename_table', :readonly => true %></td>
