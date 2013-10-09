@@ -20,7 +20,7 @@
     </tr>
   <% end %>
 </table>
-　　<%= button_to_function :delete_column, 'deleteColumn("_columns_' + @migration_method.name + '_' + @migration_func.name + '");' %>
+　　<input onclick="<%= "deleteTableRow(\"_columns_" + @migration_method.name + '_' + @migration_func.name + '");' %>" type="button" value="delete_column">
   <br /><br />
   <table id=[new_column][<%= @migration_method.name %>][table] border="0" style="margin-left:2em;">
     <tr>
@@ -40,7 +40,8 @@
       <td><%= text_field_tag '[new_column][' + @migration_method.name + '][' + @migration_func.name + '][scale]' %></td>
     </tr>
   </table>
-　　<%= button_to_function :add_column, 'addColumn_' + @migration_method.name + '_' + @migration_func.name + '("_columns_' + @migration_method.name + '_' + @migration_func.name + '");' %>
+　　<input onclick="<%= "addColumn_" + @migration_method.name + '_' + @migration_func.name  + '("_columns_' + @migration_method.name + '_' + @migration_func.name + '");' %>" type="button" value="add_column">
+　　<%#= button_to_function :add_column, 'addColumn_' + @migration_method.name + '_' + @migration_func.name + '("_columns_' + @migration_method.name + '_' + @migration_func.name + '");' %>
 
 <script type="text/javascript">
   function addColumn_<%= @migration_method.name + '_' + @migration_func.name %>(tableID) {

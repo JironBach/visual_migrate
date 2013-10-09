@@ -11,13 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131006135044) do
-
-  create_table "test_tables", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "commentator", limit: 64, null: false
-    t.text     "comment",                null: false
-  end
+ActiveRecord::Schema.define(version: 20131006094505) do
 
 end

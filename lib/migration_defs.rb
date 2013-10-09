@@ -163,10 +163,8 @@ module MigrationDefs
     def get_str
       result = ''
       result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
-      if !@default.blank?
-        result += ", :default => '" + @default.to_s + "'" 
-      end
-      result += ', :null => ' + @null.to_s if !@null
+      result += ', :default => ' + @default.to_s if !@default.blank?
+      result += ', :null => (false)' if !@null
       result += ', :precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
       result += ', :scale => ' + @scale.to_s if !@scale.nil? && @scale != 0
       result
@@ -283,7 +281,7 @@ module MigrationDefs
           c.set_option 'precision', val[:precision]
           c.set_option 'scale', val[:scale]
         else
-          add_column(val[:type])
+          c = add_column(val[:type])
         end
       end
     end
