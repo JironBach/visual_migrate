@@ -73,12 +73,10 @@ class VisualMigrateRipper < Ripper::Filter
         @func_option = nil
       end
     elsif !@method_name.nil? && MigrationDefs::FuncName.has_key?(tok)
-      puts tok
       @func_type = tok
       @is_func = true
     elsif @is_func
       if !@func_type.nil?
-        puts tok
         @func_class = @class.methods[@method_name].add_func(@func_type, tok)
         @is_func_option = true
         @func_name = tok

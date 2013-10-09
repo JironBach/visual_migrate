@@ -54,6 +54,7 @@ module VisualMigrate
 
         @mi_lex = Ripper.lex(@migration_content)
         vm_filter = ClassFilter.new @migration_content
+        puts '-----vm_filter.parse-----' + @migration_content
         vm_filter.parse
         @context = vm_filter.class.get_str
         @vm_ripper = vm_filter
@@ -66,13 +67,13 @@ module VisualMigrate
     def save_migration
       migration_class = MigrationDefs::MigrationClass.new(params[:class_name], params[:parent_name])
       migration_class.parse_from_params params
-      
+
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
       @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#migration_class.get_str#params.inspect#
       
-      open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
       #@tmp = true
       #open(Rails.root.to_s + '/tmp/visual-migrate_tmp.rb', 'w') do |f|
+      open(Rails.root.to_s + '/db/migrate/' + params[:id] + '.rb', 'w') do |f|
         f.write(@context)
       end
 

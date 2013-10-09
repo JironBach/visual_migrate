@@ -6,7 +6,6 @@ require 'migration_defs'
 
 class FuncFilterFactory
   def self.get(func, src)
-    puts '-----' + func.inspect + '-----'
     if func.is_a? MigrationDefs::CreateTableFunc
       return CreateTableFuncFilter.new(src, func)
     elsif func.is_a? MigrationDefs::RenameTableFunc
@@ -35,7 +34,7 @@ class CreateTableFuncFilter < Ripper::Filter
   
   def initialize(src, fclass)
     super src
-    
+
     @fclass = fclass
     @func_str = ''
     @option_str = Array.new
@@ -77,13 +76,13 @@ class CreateTableFuncFilter < Ripper::Filter
     if tok == 't'
       @is_column = true
     elsif @is_column
-      if tok == 'timestamps'
-        @fclass.add_column(tok)
-        @is_column_type = false
-      else
+      if tok != 'timestamps'
         @column_type = tok
         @is_column_type = true
         @option_str << ''
+      else
+        @fclass.add_column(tok)
+        @is_column_type = false
       end
       @is_column = false
     elsif @is_column_type
@@ -143,6 +142,7 @@ class CreateTableFuncFilter < Ripper::Filter
     if !@is_tstring_content
       on_tstring_content("", f)
     end
+    add_tok tok
   end
   
   def on_int(tok, f)
@@ -189,4 +189,3 @@ end
 class AddColumnFuncFilter < CreateTableFuncFilter
   #ここから
 end
-
