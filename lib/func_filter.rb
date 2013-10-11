@@ -31,7 +31,7 @@ end
 
 class CreateTableFuncFilter < Ripper::Filter
   attr_accessor :fclass, :func_str, :option_str
-  
+
   def initialize(src, fclass)
     super src
 

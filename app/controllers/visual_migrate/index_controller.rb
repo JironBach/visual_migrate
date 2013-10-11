@@ -60,7 +60,6 @@ module VisualMigrate
         @vm_ripper = vm_filter
       end
       
-      @edit_mode = 'edit_migration'
       render :edit_migration
     end
     

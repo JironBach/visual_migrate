@@ -3,7 +3,7 @@ class CreateTestTables < ActiveRecord::Migration
     create_table(:test_tables) do |t|
       t.timestamps
       t.string(:title, :limit => 64, :default => "abc", :null => (false))
-      t.text(:contents, :default => "xyz")
+      t.text(:contents)
     end
   end
 end

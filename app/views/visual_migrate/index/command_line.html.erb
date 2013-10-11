@@ -1,5 +1,5 @@
 <%= form_tag(action: :run_command) do %>
-  <%= text_field_tag 'command_line', 'rake db:', :size => 50 %>
+  <%= text_field_tag 'command_line', params[:command_line].nil? ? 'rake db:' : params[:command_line], size: 50 %>
   <br />
   <!--input type="button" value="run" onclick="send_text();" ><br /-->
   <%= submit_tag "run" %><br />

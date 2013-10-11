@@ -3,7 +3,7 @@
   <ul>
     <% @migration_files.reverse.each do |mf| %>
       <% if SchemaMigration.where(:version => mf.basename.to_s[0, 14]).first.blank? %>
-        <%= link_to mf.basename, :action => @edit_mode, :id => mf.basename('.rb') %>
+        <%= link_to mf.basename, :action => @edit_mode.nil? ? 'edit_migration' : @edit_mode, :id => mf.basename('.rb') %>
       <% else %>
         <%= mf.basename %>
       <% end %>
