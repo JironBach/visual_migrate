@@ -13,4 +13,8 @@
 
 ActiveRecord::Schema.define(version: 20131006094505) do
 
+  create_table "visual_migrate_schema_migrations", force: true do |t|
+    t.string "version", null: false
+  end
+
 end
