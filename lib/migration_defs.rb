@@ -35,6 +35,7 @@ module MigrationDefs
     'binary' => 'バイナリデータ',
     'boolean' => 'Boolean型',
     'timestamps' => 'レコードの作成・更新日時'
+    'attachment' => 'attachment'
   }
  
   class MigrationClass
