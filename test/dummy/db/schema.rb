@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131006094505) do
+ActiveRecord::Schema.define(version: 20131011134705) do
+
+  create_table "master_ages", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "value",      limit: 16, null: false
+  end
+
+  create_table "testes_tables", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "title",      limit: 64, default: "abc", null: false
+    t.text     "contents"
+  end
 
   create_table "visual_migrate_schema_migrations", force: true do |t|
     t.string "version", null: false

@@ -11,3 +11,11 @@
  *= require_self
  *= require_tree .
  */
+
+.migfiles {
+  width: 278px;
+  height: 25em;
+  border: solid 1px #666;
+  overflow: scroll;
+  padding: 10px;
+}
