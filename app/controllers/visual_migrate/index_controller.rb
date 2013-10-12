@@ -154,6 +154,7 @@ module VisualMigrate
           else
             @run_result = stdout + '<br /><font color="red">' + stderr + '</font>'
           end
+          reset_session
         #rescue
         #  @run_result = '<font color="red">failed</font>'
         #end
