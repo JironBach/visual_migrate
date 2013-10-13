@@ -23,7 +23,7 @@ gem "ruby2ruby"
 gem 'jquery-ui-rails'
 
 gem 'sqlite3'
-gem "mysql2", "0.3.11"
+gem "mysql2", "0.3.12"
 gem "ruby-mysql"
 gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"
