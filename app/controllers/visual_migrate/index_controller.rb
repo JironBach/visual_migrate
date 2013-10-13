@@ -154,7 +154,7 @@ module VisualMigrate
           else
             @run_result = stdout + '<br /><font color="red">' + stderr + '</font>'
           end
-          reset_session
+          reset_session#db:migrate:down時にvalidationが走るのて
         #rescue
         #  @run_result = '<font color="red">failed</font>'
         #end

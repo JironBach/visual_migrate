@@ -1,17 +1,19 @@
 <h3>Migration Files</h3>
 <% if !(@migration_files.nil? || @migration_files.blank?) %>
-  <ul>
-    <div class="migfiles">
+  <div id="migfiles">
+    <ul>
       <% @migration_files.reverse.each do |mf| %>
-        <% if SchemaMigration.where(:version => mf.basename.to_s[0, 14]).first.blank? %>
-          <%= link_to mf.basename, :action => @edit_mode.blank? ? 'edit_migration' : @edit_mode, :id => mf.basename('.rb') %>
-        <% else %>
-          <%= mf.basename %>
-        <% end %>
+        <li>
+          <% if SchemaMigration.where(:version => mf.basename.to_s[0, 14]).first.blank? %>
+            <%= link_to mf.basename, :action => @edit_mode.blank? ? 'edit_migration' : @edit_mode, :id => mf.basename('.rb') %>
+          <% else %>
+            <%= mf.basename %>
+          <% end %>
+        </li>
       <% end %>
       <br />
-    </div>
-  </ul>
+    </ul>
+  </div>
 <% else %>
   migration files not found.<br />
 <% end %>

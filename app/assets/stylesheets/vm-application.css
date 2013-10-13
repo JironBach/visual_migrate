@@ -11,3 +11,30 @@
  *= require_self
  *= require_tree .
  */
+
+div#migfiles {
+  width: 298px;
+  height: 300px;
+  border: solid 1px #666;
+  overflow: scroll;
+  overflow-x : hidden;
+  padding: 0;
+}
+
+div#migfiles ul {
+  width: 278px;
+  list-style: none;
+  margin: 0px;
+  margin-left: 0px;
+  padding: 0px;
+}
+
+div#migfiles li {
+  margin: 0;
+  padding: 5px;
+  width: 280px;
+  list-style: none;
+  border-top: none;
+  border-bottom: 1px dotted #B1B6B9;
+  word-wrap: break-word;
+}
