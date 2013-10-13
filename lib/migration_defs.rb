@@ -37,19 +37,19 @@ module MigrationDefs
     'timestamps' => 'レコードの作成・更新日時',
     'attachment' => 'attachment',
   }
- 
+
   class MigrationClass
     attr_accessor :name, :parent, :methods
-    
+
     def initialize(name, parent_name = nil)
       @name = name
       @parent = parent_name
       @methods = Hash.new
     end
-    
+
     def parse_from_params(parse_params)
       return '' if parse_params[:methods].nil?
-      
+
       parse_params[:methods].each do |key, val|
         add_method(key) if val[:enable] == 'true'
       end
@@ -59,14 +59,14 @@ module MigrationDefs
         end
       end
     end
-    
+
     def add_method(name)
       @methods[name] = MigrationMethod.new(name)
     end
-    
+
     def get_str
       return if @name.nil?
-      
+
       result = 'class ' + @name + (@parent.nil? ? '' : '< ' + @parent) + "\n"
       @methods.each do |key, val|
         result += val.get_str
@@ -74,18 +74,18 @@ module MigrationDefs
       result += "end\n"
     end
   end
-  
+
   class AbstractMigrationClass
     #abstract_method :get_str, '(str -> String)' #undefined method `abstract_method' for MigrationDefs::AbstractMigrationClass:Class
     #abstract_method :parse_from_params, '(str -> String)'
   end
-  
+
   class MigrationMethod < AbstractMigrationClass
     attr_accessor :name, :funcs
-    
+
     def initialize(name)
       return nil if !MethodName.include? name
-      
+
       @name = name
       @funcs = Array.new
     end
@@ -93,10 +93,10 @@ module MigrationDefs
     def add_func(name, func_name, *func_options)
       @funcs << FuncFactory::get(name, func_name, func_options)
     end
-    
+
     def parse_from_params(parse_params)
       return '' if parse_params[:funcs].nil?
-      
+
       parse_params[:funcs].each do |key, val|
         add_func(val[:name], val[:table_name]) if val[:delete] != 'true'
       end
@@ -106,7 +106,7 @@ module MigrationDefs
         end
       end
     end
-    
+
     def get_str
       result = 'def ' + @name + "\n"
       @funcs.each do |func|
@@ -115,7 +115,7 @@ module MigrationDefs
       result += "end\n"
     end
   end
-  
+
   class FuncFactory
     def self.get(func_type, func_name, *func_options)#How do I dynamic params?
       case func_type
@@ -141,10 +141,10 @@ module MigrationDefs
       end
     end
   end
-  
+
   class ColumnOption < AbstractMigrationClass
     attr_accessor :limit, :default, :null, :precision, :scale
-    
+
     Description = {
       'limit' => 'カラムの桁数', 
       'default' => 'デフォルトの値',
@@ -160,7 +160,7 @@ module MigrationDefs
       @precision = precision
       @scale = scale
 	  end
-    
+
     def get_str
       result = ''
       result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
@@ -174,15 +174,15 @@ module MigrationDefs
 
   class Column < AbstractMigrationClass
     attr_accessor :name, :type, :option
-    
+
     def initialize(type, name = '', *p_option)
       return nil if !ColumnType.has_key?(type)
-      
+
       @type = type
       @name = name
       @option = ColumnOption.new
     end
-    
+
     def set_option(key, val)
       case key
       when 'limit'
@@ -197,14 +197,14 @@ module MigrationDefs
         @option.scale = val.to_i
       end
     end
-    
+
     def get_str
       result = 't.' + @type
       result += ' :' + @name if @type != 'timestamps'
       result += @option.get_str
     end
   end
-  
+
   class CreateTableOption < AbstractMigrationClass
     attr_accessor :id, :primary_key, :options, :temporary, :force
 
@@ -215,7 +215,7 @@ module MigrationDefs
       'temporary' => '一時テーブルとして作成',
       'force' => 'テーブルを作成前に、既存のテーブルを削除',
     }
-    
+
     def initialize(id = true, primary_key = 'id', options = nil, temporary = false, force = true)
       @id = id
       @primary_key = primary_key
@@ -223,7 +223,7 @@ module MigrationDefs
       @temporary = temporary
       @force = force
     end
-    
+
     def set_option(key, val)
       case key
       when 'id'
@@ -238,7 +238,7 @@ module MigrationDefs
         @force = (val == 'true')
       end
     end
-    
+
     def get_str
       result = ''
       result += ', ' + ':id => ' + @id.to_s if !@id.nil? && !@id
@@ -252,28 +252,28 @@ module MigrationDefs
 
   class CreateTableFunc < AbstractMigrationClass
     attr_accessor :name, :option, :columns
-    
+
     def initialize(name)
       @name = name
       @option = CreateTableOption.new
       @columns = Array.new
     end
-    
+
     def add_column(type, name = '')
       @columns << Column.new(type, name)
       @columns.last
     end
-    
+
     def parse_from_params(parse_params)
       return '' if parse_params.nil? || parse_params[:columns].nil?
-      
+
       parse_params.each do |key, val|
         @option.set_option(key, val)
       end
-      
+
       parse_params[:columns].each do |key, val|
         next if val.nil?
-        
+
         if val[:type] != 'timestamps'
           c = add_column(val[:type], val[:name])
           c.set_option 'limit', val[:limit]
@@ -286,7 +286,7 @@ module MigrationDefs
         end
       end
     end
-    
+
     def get_str
       result = 'create_table :' + @name
       result += @option.get_str if !@option.nil?
@@ -297,22 +297,22 @@ module MigrationDefs
       result += "end\n"
     end
   end
-  
+
   class RenameTableFunc < AbstractMigrationClass
     attr_accessor :name, :new_name
-    
+
     def initialize(name)
       @name = name
     end
-    
+
     def add_new_name(new_name)
       @new_name = new_name
     end
-    
+
     def parse_from_params(parse_params)
       @new_name = parse_params[:new_table_name]
     end
-    
+
     def get_str
       'rename_table :' + @name + (@new_name.blank? ? '' : ', :' + @new_name) + "\n"
     end
@@ -320,15 +320,15 @@ module MigrationDefs
 
   class DropTableFunc < AbstractMigrationClass
     attr_accessor :name
-    
+
     def initialize(name)
       @name = name
     end
-    
+
     def parse_from_params(parse_params)
       return ''
     end
-    
+
     def get_str
       'drop_table :' + @name + "\n"
     end
@@ -336,15 +336,15 @@ module MigrationDefs
 
   class AddColumnFunc < AbstractMigrationClass
     attr_accessor :name, :column
-    
+
     def initialize(name)
       @name = name
     end
-    
+
     def add_column(type, name = '')
       Column.new(type, name)
     end
-    
+
     def parse_from_params(parse_params)
       if parse_params[:type] != 'timestamps'
         @column = add_column(parse_params[:type], parse_params[:column])
@@ -357,7 +357,7 @@ module MigrationDefs
         add_column(parse_params[:type])
       end
     end
-    
+
     def get_str
       if @column.nil?
           return 'add_column :' + @name + "\n"
