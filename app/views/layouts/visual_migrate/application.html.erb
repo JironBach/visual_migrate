@@ -11,8 +11,8 @@
   <!--[if lt IE 7]>
   <script src="http://ie7-js.googlecode.com/svn/version/2.0(beta3)/IE7.js" type="text/javascript"></script>
   <![endif]-->
-  <%= stylesheet_link_tag    "vm-application", :media => "all" %>
-  <%= stylesheet_link_tag    "vm-common", :media => "all" %>
+  <%= stylesheet_link_tag    "vm-application", media: "all" %>
+  <%= stylesheet_link_tag    "vm-common", media: "all" %>
   <%= javascript_include_tag "vm-application" %>
   <%= javascript_include_tag "jquery" %>
   <%= javascript_include_tag "jquery.cookie" %>
@@ -30,10 +30,10 @@
          <td width="650px">
           <div id="menu">
             <ul>
-              <li><%= link_to "Edit Migration", :action => :edit_migration, :id => params[:id] %></li>
-              <li><%= link_to "Direct Edit", :action => :direct_edit, :id => params[:id] %></li>
-              <!--li><%#= link_to "Modify Table", :action => :modify_table %></li-->
-              <li><%= link_to "command line", :action => :command_line %></li>
+              <li><%= link_to "Edit Migration", action: :edit_migration, id: params[:id] %></li>
+              <li><%= link_to "Direct Edit", action: :direct_edit, id: params[:id] %></li>
+              <!--li><%#= link_to "Modify Table", action: :modify_table %></li-->
+              <li><%= link_to "command line", action: :command_line %></li>
             </ul>
           </div>
          </td>
@@ -47,9 +47,9 @@
       <div id="sub">
          <div class="section">
            <% if @section_category == :migrations %>
-            <%= render :partial => 'section_migrations' %>
+            <%= render partial: 'section_migrations' %>
            <% else %>
-            <%= render :partial => 'section_tables' %>
+            <%= render partial: 'section_tables' %>
            <% end %>
          <!-- /.section --></div>
       <!-- /#sub --></div>

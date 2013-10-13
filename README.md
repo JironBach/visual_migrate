@@ -1,5 +1,5 @@
 visual_migrate
-#### migrate plugin for [Ruby on Rails]
+#### migrate plugin for Ruby on Rails
 visual_migrate brings a easy way to edit migration files for Ruby on Rails.
 
 ### Install
@@ -11,17 +11,17 @@ group :development do
 end
 ```
   to Gemfile.
-* If you use MySQL, add `gem "mysql2", "0.3.11"` to Gemfile. Currently version supports only 0.3.11. 
+* If you use MySQL, add `gem "mysql2", "0.3.12"` to Gemfile. Currently version supports under 0.3.12. 
 * Add `mount VisualMigrate::Engine => "/visual_migrate" if ENV[RAILS_ENV] != 'production'` to config/routes.rb.
-* Do rake to create schema_migrations.
+* If schema_migrations not exists in database, then do rake to create schema_migrations.
 ```bash
 rake db:migrate
 ```
 
 ### Usage
-* Access "http://localhost:3000/visual_migrate/".
-* Click "command line" and do "rails generate model test".
-* Click "Edit Migration" and select migration file.
+* Run webrick and access `http://localhost:3000/visual_migrate/`.
+* Click "command line" tab and do `rails generate model ...` or `rails generate migration ...`.
+* Click and edit new migration file.
 
 ### System requirement
 * Ruby 2.0.
@@ -29,10 +29,12 @@ rake db:migrate
 * mysql2 gem `0.3.12`.
 
 ### attention
-* The applicatoins which loading visual_migrate are allow pending migrations also development enviroment.
-* Current Version require mysql2 gem version `0.3.12`. Don't run with version 0.3.13.
+* The applicatoins which loading visual_migrate are allow pending migrations, also development enviroment.
+* Current Version require mysql2 gem version `0.3.12`. Don't run with version 0.3.13 or later.
+* Clear session when run command. So login session will maybe cancelled.
 
 ### In the Future
+* Select session variables to clear when run command.
 * mysql2 version 0.3.13 or later.
 * Ruby 1.3?
 * RoR 3.2?
