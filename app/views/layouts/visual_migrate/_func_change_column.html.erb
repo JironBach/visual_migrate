@@ -1,4 +1,4 @@
-<table id="func_add_column" border="0" style="margin-left:2em;">
+<table id="func_change_column" border="0" style="margin-left:2em;">
   <tr>
     <th>Func</th>
     <th>Table</th>
@@ -10,9 +10,9 @@
     <th>delete</th>
   </tr>
   <tr>
-    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][name]', 'add_column', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][name]', 'change_column', :readonly => true %></td>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][table_name]', @migration_func.name, :readonly => true %></td>
-    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][column]', @migration_func.column.name %></td>
+    <td><%= columns_select '[methods][' + @migration_method.name + '][funcs][][column]', @migration_func.name, @migration_func.column.name %></td>
     <td><%= type_select '[methods][' + @migration_method.name + '][funcs][][type]', !@migration_func.column.nil? ? @migration_func.column.type : "" %></td>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][limit]', !@migration_func.column.nil? && !@migration_func.column.option.nil? ? @migration_func.column.option.limit : "" %></td>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][default]', !@migration_func.column.nil? && !@migration_func.column.option.nil? ? @migration_func.column.option.default : "" %></td>

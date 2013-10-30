@@ -11,17 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131006135044) do
+ActiveRecord::Schema.define(version: 20131030105601) do
 
   create_table "test_tables", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "title",      limit: 64, default: "abc", null: false
+    t.string   "title",      limit: 64,  default: "abc", null: false
     t.text     "contents"
-  end
-
-  create_table "visual_migrate_schema_migrations", force: true do |t|
-    t.string "version", null: false
+    t.text     "tmp_str",    limit: 255,                 null: false
+    t.integer  "test_int",               default: 100
+    t.float    "test_float",             default: 3.14
   end
 
 end

@@ -7,7 +7,7 @@
     <td><%= func_select '[new_func][' + params[:method_name] + '][type]', '' %></td>
     <td>
       <%= tables_select '[new_func][' + params[:method_name] + '][table_name]'#,
-        #'_new_option_' + params[:method_name] + '_' + @migration_func.name + '_column_select',
+        #'_new_option_' + params[:method_name] + '__column_select',
         #params[:method_name], @migration_func.name
       %>
     </td>

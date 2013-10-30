@@ -1,0 +1,12 @@
+<table id="func_change_column_default" border="0" style="margin-left:2em;">
+  <tr>
+    <th width="80em">Func</th>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][name]', 'change_column_default', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][table_name]', @migration_func.name, :readonly => true %></td>
+    <td>
+      <%= columns_select '[methods][' + @migration_method.name + '][funcs][][column_name]', @migration_func.name, @migration_func.column_name %>
+    </td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][default]', @migration_func.default.nil? ? 'nil' : @migration_func.default %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][delete]', true, false %>delete　</td>
+  </tr>
+</table>

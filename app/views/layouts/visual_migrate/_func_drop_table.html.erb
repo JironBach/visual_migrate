@@ -1,8 +1,8 @@
 <table id="func_drop_table" border="0" style="margin-left:2em;">
   <tr>
     <th width="80em">Func</th>
-    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][name]', 'drop_table', :readonly => true %></td>
-    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][table_name]', @migration_func.name, :readonly => true %></td>
-    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][' + @migration_func.name + '][delete]', true, false %>delete　</td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][name]', 'drop_table', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][table_name]', @migration_func.name, :readonly => true %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][delete]', true, false %>delete　</td>
   </tr>
 </table>

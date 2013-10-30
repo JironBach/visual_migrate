@@ -6,7 +6,7 @@ require 'func_filter'
 
 class MethodFilter < Ripper::Filter
   attr_accessor :mclass, :method_str, :funcs_str, :func_filters
-  
+
   def initialize(src, mclass)
     super src
 
@@ -18,7 +18,7 @@ class MethodFilter < Ripper::Filter
     @is_func = false
     @is_do = false
   end
-  
+
   def add_tok tok
     if @is_func
       @funcs_str[-1] += tok
@@ -26,7 +26,7 @@ class MethodFilter < Ripper::Filter
       @method_str += tok
     end
   end
-  
+
   def on_default(event, tok, f)
     add_tok tok
   end
@@ -36,7 +36,7 @@ class MethodFilter < Ripper::Filter
       @is_method = true
       @is_func = false
     end
-    
+
     if tok == 'end'
       if @is_do
         @is_do = false
@@ -57,7 +57,7 @@ class MethodFilter < Ripper::Filter
 
     add_tok tok
   end
-  
+
   def on_ident(tok, f)
     if !@method_name.nil? && MigrationDefs::FuncName.has_key?(tok)
       @func_type = tok
@@ -72,6 +72,11 @@ class MethodFilter < Ripper::Filter
     add_tok tok
   end
 
+  def on_nl(tok, f)
+    @is_func = false
+    add_tok tok
+  end
+
   def on_do_block(tok, f)
     if !@is_func
       @is_func = true
@@ -80,7 +85,7 @@ class MethodFilter < Ripper::Filter
     end
     add_tok tok
   end
-  
+
   def on_lbrase(tok, f)
     if !@is_func
       @is_func = true
@@ -89,7 +94,7 @@ class MethodFilter < Ripper::Filter
     end
     add_tok tok
   end
-  
+
   def on_rbrase(tok, f)
     if @is_do
       @is_do = false
@@ -98,5 +103,5 @@ class MethodFilter < Ripper::Filter
     end
     add_tok tok
   end
-  
+
 end

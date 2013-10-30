@@ -97,18 +97,20 @@ module MigrationDefs
     def parse_from_params(parse_params)
       return '' if parse_params[:funcs].nil?
 
-      parse_params[:funcs].each do |key, val|
+      parse_params[:funcs].each do |val|
         add_func(val[:name], val[:table_name]) if val[:delete] != 'true'
       end
-      parse_params[:funcs].each do |p_key, p_val|#not DRY
-        @funcs.each do |func|
-          func.parse_from_params(p_val)
+      index = 0
+      parse_params[:funcs].each do |val|#not DRY
+        if val[:delete] != 'true'
+          @funcs[index].parse_from_params(val)
+          index += 1
         end
       end
     end
 
     def get_str
-      result = 'def ' + @name + "\n"
+      result = "def #{@name}\n"
       @funcs.each do |func|
         result += func.get_str if !func.nil?
       end
@@ -128,9 +130,13 @@ module MigrationDefs
       when 'add_column'
         return AddColumnFunc.new(func_name)
       when 'rename_column'
+        return RenameColumnFunc.new(func_name)
       when 'change_column'
+        return ChangeColumnFunc.new(func_name)
       when 'remove_column'
+        return RemoveColumnFunc.new(func_name)
       when 'change_column_default'
+        return ChangeColumnDefaultFunc.new(func_name)
       when 'add_index'
       when 'rename_index'
       when 'remove_index'
@@ -146,9 +152,9 @@ module MigrationDefs
     attr_accessor :limit, :default, :null, :precision, :scale
 
     Description = {
-      'limit' => 'カラムの桁数', 
+      'limit' => 'カラムの桁数',
       'default' => 'デフォルトの値',
-      'null' => 'nullを許可するか', 
+      'null' => 'nullを許可するか',
       'precision' => '数値の桁数',
       'scale' => '小数点以下の桁数',
     }
@@ -163,11 +169,11 @@ module MigrationDefs
 
     def get_str
       result = ''
-      result += ', :limit => ' + @limit.to_s if !@limit.blank? && @limit != 0
-      result += ', :default => ' + @default.to_s if !@default.blank?
-      result += ', :null => (false)' if !@null
-      result += ', :precision => ' + @precision.to_s if !@precision.nil? && @precision != 0
-      result += ', :scale => ' + @scale.to_s if !@scale.nil? && @scale != 0
+      result += ", :limit => #{@limit.to_s}" if !@limit.blank? && @limit != 0
+      result += ", :default => #{@default.to_s}" if !@default.blank?
+      result += ", :null => #{false.to_s}" if !@null
+      result += ", :precision => #{@precision.to_s}" if !@precision.nil? && @precision != 0
+      result += ", :scale => #{@scale.to_s}" if !@scale.nil? && @scale != 0
       result
     end
   end
@@ -198,9 +204,9 @@ module MigrationDefs
       end
     end
 
-    def get_str
-      result = 't.' + @type
-      result += ' :' + @name if @type != 'timestamps'
+    def get_str(prefix = 't.')
+      result = prefix + @type
+      result += " :#{@name}" if (@type != 'timestamps') && (@type != 'attachment')
       result += @option.get_str
     end
   end
@@ -209,14 +215,14 @@ module MigrationDefs
     attr_accessor :id, :primary_key, :options, :temporary, :force
 
     Description = {
-      'id' => '主キーを自動生成', 
+      'id' => '主キーを自動生成',
       'primary_key' => '主キーのカラムの名前',
-      'options' => 'テーブルオプション', 
+      'options' => 'テーブルオプション',
       'temporary' => '一時テーブルとして作成',
       'force' => 'テーブルを作成前に、既存のテーブルを削除',
     }
 
-    def initialize(id = true, primary_key = 'id', options = nil, temporary = false, force = true)
+    def initialize(id = true, primary_key = 'id', options = nil, temporary = false, force = false)
       @id = id
       @primary_key = primary_key
       @options = options
@@ -241,11 +247,11 @@ module MigrationDefs
 
     def get_str
       result = ''
-      result += ', ' + ':id => ' + @id.to_s if !@id.nil? && !@id
-      result += ', ' + ':primary_key => ' + @primary_key if @primary_key != 'id'
-      result += ', ' + ':options => ' + @options if !@options.nil? && !@options.blank?
-      result += ', ' + ':temporary => ' + @temporary if !@temporary.nil? && @temporary != false
-      result += ', ' + ':force => ' + @force if !@force.nil? && @force != true
+      result += ", :id => #{@id.to_s}" if !@id.nil? && !@id
+      result += ", :primary_key => #{@primary_key}" if @primary_key != 'id'
+      result += ", :options => #{@options}" if !@options.nil? && !@options.blank?
+      result += ", :temporary => #{@temporary.to_s}" if !@temporary.nil? && @temporary != false
+      result += ", :force => #{@force.to_s}" if !@force.nil? && @force != true
       result
     end
   end
@@ -274,7 +280,7 @@ module MigrationDefs
       parse_params[:columns].each do |key, val|
         next if val.nil?
 
-        if val[:type] != 'timestamps'
+        if (val[:type] != 'timestamps') && (val[:type] != 'attachment')
           c = add_column(val[:type], val[:name])
           c.set_option 'limit', val[:limit]
           c.set_option 'default', val[:default]
@@ -288,7 +294,7 @@ module MigrationDefs
     end
 
     def get_str
-      result = 'create_table :' + @name
+      result = "create_table :#{@name}"
       result += @option.get_str if !@option.nil?
       result += " do |t|\n"
       @columns.each do |col|
@@ -314,7 +320,7 @@ module MigrationDefs
     end
 
     def get_str
-      'rename_table :' + @name + (@new_name.blank? ? '' : ', :' + @new_name) + "\n"
+      "rename_table :#{@name}" + (@new_name.blank? ? '' : ":#{@new_name}") + "\n"
     end
   end
 
@@ -342,11 +348,11 @@ module MigrationDefs
     end
 
     def add_column(type, name = '')
-      Column.new(type, name)
+      @column = Column.new(type, name)
     end
 
     def parse_from_params(parse_params)
-      if parse_params[:type] != 'timestamps'
+      if (parse_params[:type] != 'timestamps') && (parse_params[:type] != 'attachment')
         @column = add_column(parse_params[:type], parse_params[:column])
         @column.set_option 'limit', parse_params[:limit]
         @column.set_option 'default', parse_params[:default]
@@ -360,20 +366,99 @@ module MigrationDefs
 
     def get_str
       if @column.nil?
-          return 'add_column :' + @name + "\n"
+          return "add_column :#{@name}\n"
       else
-        if @column.type != 'timestamps'
-          return 'add_column :' + @name + ', :' + @column.name + ', :' + @column.type +
-                ', :limit => ' + @column.limit +
-                ', :default' + @column.default +
-                ', :null' + @column.null +
-                ', :precision' + @column.precision +
-                ', :scale' + @column.scale +
-                "\n"
+        if (@column.type != 'timestamps') && (@column.type != 'attachment')
+          return "add_column :#{@name}" + (@column.name.blank? ? "\n" : ", :#{@column.name}, :#{@column.type}#{@column.option.get_str}\n")
         else
-          return 'add_column:' + @name + ", :timestamps\n"
+          return "add_column :#{@name}, #{:@column.type}\n"
         end
       end
+    end
+  end
+
+  class RemoveColumnFunc < AbstractMigrationClass
+    attr_accessor :name, :column_name
+
+    def initialize(name)
+      @name = name
+    end
+
+    def add_column_name(column_name)
+      @column_name = column_name
+    end
+
+    def parse_from_params(parse_params)
+      @column_name = parse_params[:column_name]
+    end
+
+    def get_str
+      "remove_column :#{@name}" + (@column_name.blank? ? '' : ", :#{@column_name}") + "\n"
+    end
+  end
+
+  class RenameColumnFunc < AbstractMigrationClass
+    attr_accessor :name, :column_name, :new_column_name
+
+    def initialize(name)
+      @name = name
+    end
+
+    def add_column_name(column_name)
+      @column_name = column_name
+    end
+
+    def add_new_column_name(column_name)
+      @new_column_name = column_name
+    end
+
+    def parse_from_params(parse_params)
+      @column_name = parse_params[:column_name]
+      @new_column_name = parse_params[:new_column_name]
+    end
+
+    def get_str
+      "rename_column :#{@name}" + (@column_name.blank? ? '' : ", :#{@column_name}") + (@new_column_name.blank? ? '' : ", :#{@new_column_name}") + "\n"
+    end
+  end
+
+  class ChangeColumnFunc < AddColumnFunc
+    def get_str
+      if @column.nil?
+          return "change_column :#{@name}\n"
+      else
+        if (@column.type != 'timestamps') && (@column.type != 'attachment')
+          return "change_column :#{@name}" + (@column.name.blank? ? "\n" : ", :#{@column.name}, :#{@column.type}#{@column.option.get_str}\n")
+        else
+          return "change_column :#{@name}, #{:@column.type}\n"
+        end
+      end
+    end
+  end
+
+  class ChangeColumnDefaultFunc < AbstractMigrationClass
+    attr_accessor :name, :column_name, :default
+
+    def initialize(name)
+      @name = name
+    end
+
+    def add_column_name(column_name)
+      @column_name = column_name
+    end
+
+    def set_column_default(default)
+      @default = default
+    end
+
+    def parse_from_params(parse_params)
+      Rails.logger.debug parse_params.inspect
+      @column_name = parse_params[:column_name]
+      @default = parse_params[:default]
+    end
+
+    def get_str
+      "change_column_default :#{@name}" + (@column_name.blank? ? '' : ", :#{@column_name}") + (@default.blank? ? '' : ", #{@default}") + "\n"
     end
   end
 

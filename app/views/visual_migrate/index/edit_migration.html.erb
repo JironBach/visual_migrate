@@ -1,8 +1,3 @@
-<!--%= raw nl2br @migration_content if !@migration_content.nil? %><hr />
-<%#= raw nl2br @context if !@context.nil? %><hr />
-<%#= @vm_ripper.inspect %><hr />
-<%#= @mi_lex.inspect %><hr /-->
-
 <% if @vm_ripper.nil? %>
   Select Migration.
 <% else %>
@@ -12,3 +7,9 @@
     <%= submit_tag 'save', data: {disable_with: "Sending..."} %>
   <% end %>
 <% end %>
+
+<%= raw nl2br @migration_content if !@migration_content.nil? %><hr />
+<%= raw nl2br @context if !@context.nil? %><hr />
+<%= params.inspect %><hr />
+<%= @vm_ripper.inspect %><hr />
+<%= @mi_lex.inspect %><hr />
