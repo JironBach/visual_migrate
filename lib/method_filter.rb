@@ -73,8 +73,7 @@ class MethodFilter < Ripper::Filter
   end
 
   def on_nl(tok, f)
-    @is_func = false
-    add_tok tok
+    @is_func = false if !@is_func
   end
 
   def on_do_block(tok, f)

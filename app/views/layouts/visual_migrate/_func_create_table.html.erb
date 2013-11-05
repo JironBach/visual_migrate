@@ -17,7 +17,7 @@
         </tr>
         <tr>
           <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][id]', true, @migration_func.option.id.nil? ? '' : @migration_func.option.id %></td>
-          <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][primary_key]', @migration_func.option.primary_key.nil? ? "'id'" : "'" + @migration_func.option.primary_key + "'" %></td>
+          <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][primary_key]', @migration_func.option.primary_key.nil? ? "'id'" : @migration_func.option.primary_key %></td>
           <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][options]', @migration_func.option.options.nil? ? "''" : @migration_func.option.options %></td>
           <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][temporary]', true, @migration_func.option.temporary %></td>
           <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][force]', true, @migration_func.option.force %></td>

@@ -5,6 +5,6 @@
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][table_name]', @migration_func.name, :readonly => true %></td>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][index_name]', @migration_func.index_name %></td>
     <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][new_index_name]', @migration_func.new_index_name %></td>
-    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][delete]', true, false %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][delete]', true, false %>delete</td>
   </tr>
 </table>
