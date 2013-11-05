@@ -144,7 +144,9 @@ module MigrationDefs
       when 'remove_index'
         return RemoveIndexFunc.new(func_name)
       when 'add_timestamps'
+        return AddTimestampsFunc.new(func_name)
       when 'remove_timestamps'
+        return RemoveTimestampsFunc.new(func_name)
       else
         return nil
       end
@@ -597,6 +599,27 @@ module MigrationDefs
       result += ", #{@index_name}" if !@index_name.nil? && !@index_name.blank?
       result += ", #{@new_index_name}" if !@new_index_name.nil? && !@new_index_name.blank?
       result += "\n"
+    end
+  end
+
+  class AddTimestampsFunc < AbstractMigrationClass
+    attr_accessor :name
+
+    def initialize(name)
+      @name = name
+    end
+
+    def parse_from_params(parse_params)
+    end
+
+    def get_str
+      return "add_timestamps :#{@name}\n"
+    end
+  end
+
+  class RemoveTimestampsFunc < AddTimestampsFunc
+    def get_str
+      return "remove_timestamps :#{@name}\n"
     end
   end
 

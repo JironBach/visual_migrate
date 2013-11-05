@@ -76,6 +76,10 @@ module VisualMigrate
         render partial: "layouts/visual_migrate/func_remove_index"
       elsif @migration_func.instance_of? MigrationDefs::RenameIndexFunc
         render partial: "layouts/visual_migrate/func_rename_index"
+      elsif @migration_func.instance_of? MigrationDefs::AddTimestampsFunc
+        render partial: "layouts/visual_migrate/func_add_timestamps"
+      elsif @migration_func.instance_of? MigrationDefs::RemoveTimestampsFunc
+        render partial: "layouts/visual_migrate/func_remove_timestamps"
       end
     end
 

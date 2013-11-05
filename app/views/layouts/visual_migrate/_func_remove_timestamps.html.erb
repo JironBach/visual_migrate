@@ -1,0 +1,8 @@
+<table id="func_remove_timestamps" border="0" style="margin-left:2em;">
+  <tr>
+    <th width="80em">Func</th>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][name]', 'remove_timestamps', :readonly => true %></td>
+    <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][table_name]', @migration_func.name, :readonly => true %></td>
+    <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][delete]', true, false %>delete　</td>
+  </tr>
+</table>

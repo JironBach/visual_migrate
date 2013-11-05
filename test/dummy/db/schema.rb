@@ -14,13 +14,13 @@
 ActiveRecord::Schema.define(version: 20131105025821) do
 
   create_table "test_tables", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.string   "title",      limit: 64,  default: "abc", null: false
     t.text     "contents"
     t.text     "tmp_str",    limit: 255,                 null: false
     t.integer  "test_int",               default: 100
     t.float    "test_float",             default: 3.14
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "test_tables", ["title", "test_int"], name: "idx", using: :btree

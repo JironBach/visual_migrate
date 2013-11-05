@@ -28,8 +28,10 @@ class FuncFilterFactory
       return RemoveIndexFuncFilter.new(src, func)
     elsif func.instance_of? MigrationDefs::RenameIndexFunc
       return RenameIndexFuncFilter.new(src, func)
-    elsif func.instance_of? 'add_timestamps'
-    elsif func.instance_of? 'remove_timestamps'
+    elsif func.instance_of? MigrationDefs::AddTimestampsFunc
+      return AddTimestampsFuncFilter.new(src, func)
+    elsif func.instance_of? MigrationDefs::RemoveTimestampsFunc
+      return RemoveTimestampsFuncFilter.new(src, func)
     else
       return nil
     end
@@ -540,4 +542,23 @@ class RenameIndexFuncFilter < RenameTableFuncFilter
     add_tok tok
   end
 
+end
+
+class AddTimestampsFuncFilter < Ripper::Filter
+  attr_accessor :fclass, :func_str
+
+  def initialize(src, fclass)
+    super src
+
+    @fclass = fclass
+    @func_str = ''
+  end
+
+  def add_tok(tok)
+    @func_str += tok
+  end
+
+end
+
+class RemoveTimestampsFuncFilter < AddTimestampsFuncFilter
 end
