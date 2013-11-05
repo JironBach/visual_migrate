@@ -6,8 +6,13 @@ visual_migrate brings a easy way to edit migration files for Ruby on Rails.
 * Add
 ```ruby
 group :development do
+  gem "ruby_parser"
+  gem "file-tail"
+  gem "sourcify"
+  gem "ruby2ruby"
+  gem 'jquery-ui-rails'
+  gem "systemu"
   gem 'visual_migrate', :git => 'git://github.com/JironBach/visual_migrate.git'
-  gem 'systemu'
 end
 ```
   to Gemfile.
