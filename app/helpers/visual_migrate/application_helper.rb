@@ -60,8 +60,6 @@ module VisualMigrate
         render partial: "layouts/visual_migrate/func_rename_table"
       elsif @migration_func.instance_of? MigrationDefs::DropTableFunc
         render partial: "layouts/visual_migrate/func_drop_table"
-      #elsif @migration_func.instance_of? MigrationDefs::ChangeTableFunc
-      #  render partial: "layouts/visual_migrate/func_change_table"
       elsif @migration_func.instance_of? MigrationDefs::AddColumnFunc
         render partial: "layouts/visual_migrate/func_add_column"
       elsif @migration_func.instance_of? MigrationDefs::RemoveColumnFunc
@@ -72,6 +70,12 @@ module VisualMigrate
         render partial: "layouts/visual_migrate/func_change_column"
       elsif @migration_func.instance_of? MigrationDefs::ChangeColumnDefaultFunc
         render partial: "layouts/visual_migrate/func_change_column_default"
+      elsif @migration_func.instance_of? MigrationDefs::AddIndexFunc
+        render partial: "layouts/visual_migrate/func_add_index"
+      elsif @migration_func.instance_of? MigrationDefs::RemoveIndexFunc
+        render partial: "layouts/visual_migrate/func_remove_index"
+      elsif @migration_func.instance_of? MigrationDefs::RenameIndexFunc
+        render partial: "layouts/visual_migrate/func_rename_index"
       end
     end
 

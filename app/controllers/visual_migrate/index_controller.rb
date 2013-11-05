@@ -145,7 +145,7 @@ module VisualMigrate
 
     def run_command
       command = params[:command_line]
-      if (command =~ /^rake .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)
+      if ((command =~ /^rake .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)) && (command !~ /;/)
         #begin
           status, stdout, stderr = systemu command
           if stderr.blank?

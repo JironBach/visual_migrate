@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131030105601) do
+ActiveRecord::Schema.define(version: 20131105025821) do
 
   create_table "test_tables", force: true do |t|
     t.datetime "created_at"
@@ -22,5 +22,7 @@ ActiveRecord::Schema.define(version: 20131030105601) do
     t.integer  "test_int",               default: 100
     t.float    "test_float",             default: 3.14
   end
+
+  add_index "test_tables", ["title", "test_int"], name: "idx", using: :btree
 
 end

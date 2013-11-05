@@ -6,27 +6,30 @@ require 'migration_defs'
 
 class FuncFilterFactory
   def self.get(func, src)
-    if func.is_a? MigrationDefs::CreateTableFunc
+    if func.instance_of? MigrationDefs::CreateTableFunc
       return CreateTableFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::RenameTableFunc
+    elsif func.instance_of? MigrationDefs::RenameTableFunc
       return RenameTableFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::DropTableFunc
+    elsif func.instance_of? MigrationDefs::DropTableFunc
       return DropTableFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::AddColumnFunc
+    elsif func.instance_of? MigrationDefs::AddColumnFunc
       return AddColumnFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::RemoveColumnFunc
+    elsif func.instance_of? MigrationDefs::RemoveColumnFunc
       return RemoveColumnFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::RenameColumnFunc
+    elsif func.instance_of? MigrationDefs::RenameColumnFunc
       return RenameColumnFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::ChangeColumnFunc
+    elsif func.instance_of? MigrationDefs::ChangeColumnFunc
       return ChangeColumnFuncFilter.new(src, func)
-    elsif func.is_a? MigrationDefs::ChangeColumnDefaultFunc
+    elsif func.instance_of? MigrationDefs::ChangeColumnDefaultFunc
       return ChangeColumnDefaultFuncFilter.new(src, func)
-    elsif func.is_a? 'add_index'
-    elsif func.is_a? 'remove_index'
-    elsif func.is_a? 'rename_index'
-    elsif func.is_a? 'add_timestamps'
-    elsif func.is_a? 'remove_timestamps'
+    elsif func.instance_of? MigrationDefs::AddIndexFunc
+      return AddIndexFuncFilter.new(src, func)
+    elsif func.instance_of? MigrationDefs::RemoveIndexFunc
+      return RemoveIndexFuncFilter.new(src, func)
+    elsif func.instance_of? MigrationDefs::RenameIndexFunc
+      return RenameIndexFuncFilter.new(src, func)
+    elsif func.instance_of? 'add_timestamps'
+    elsif func.instance_of? 'remove_timestamps'
     else
       return nil
     end
@@ -392,6 +395,148 @@ class ChangeColumnDefaultFuncFilter < RenameTableFuncFilter
       @is_comma = false
       @is_default = false;
     end
+    add_tok tok
+  end
+
+end
+
+class AddIndexFuncFilter < Ripper::Filter
+  attr_accessor :fclass, :func_str
+
+  def initialize(src, fclass)
+    super src
+
+    @fclass = fclass
+    @func_str = ''
+    @is_columns = false
+    @columns = ''
+    @is_index_option = false
+  end
+
+  def add_tok(tok)
+    if @is_columns
+      @columns += tok
+    end
+    @func_str += tok
+  end
+
+  def on_default(event, tok, f)
+    add_tok tok
+  end
+
+  def on_kw(tok, f)
+    if @is_index_option && (tok == 'true' || tok == 'false')
+      @fclass.option.set_option('unique', tok)
+    end
+    add_tok tok
+  end
+
+  def on_tstring_content(tok, f)
+    if @is_index_option
+      @fclass.option.set_option('name', "'#{tok}'")
+    end
+    add_tok tok
+  end
+
+  def on_int(tok, f)
+    if @is_index_option
+      @fclass.option.set_option('length', tok)
+    end
+    add_tok tok
+  end
+
+  def on_lbracket(tok, f)
+    @is_columns = true
+    add_tok tok
+  end
+
+  def on_rbracket(tok, f)
+    add_tok tok
+    @fclass.columns = @columns
+    @is_index_option = true;
+    @is_columns = false
+  end
+
+end
+
+class RemoveIndexFuncFilter < Ripper::Filter
+  attr_accessor :fclass, :func_str
+
+  def initialize(src, fclass)
+    super src
+
+    @fclass = fclass
+    @func_str = ''
+    @is_columns = false
+    @columns = ''
+    @is_name = false
+  end
+
+  def add_tok(tok)
+    if @is_columns
+      @columns += tok
+    end
+    @func_str += tok
+  end
+
+  def on_default(event, tok, f)
+    add_tok tok
+  end
+
+  def on_ident(tok, f)
+    if tok == 'name'
+      @is_name = true
+      @is_columns = false
+    elsif tok == 'column'
+      @is_name = false
+    end
+    add_tok tok
+  end
+
+  def on_tstring_content(tok, f)
+    if @is_name
+      @fclass.option.set_option('name', "'#{tok}'")
+    end
+    add_tok tok
+  end
+
+  def on_lbracket(tok, f)
+    @is_columns = true
+    add_tok tok
+  end
+
+  def on_rbracket(tok, f)
+    add_tok tok
+    @fclass.option.set_option('column', @columns)
+    @is_columns = false
+  end
+
+end
+
+class RenameIndexFuncFilter < RenameTableFuncFilter
+  def initialize(src, fclass)
+    super src, fclass
+
+    @is_comma = false;
+    @is_index = false
+    @is_new_index = false
+  end
+
+  def on_tstring_content(tok, f)
+    if @is_new_index && @is_comma
+      @fclass.new_index_name = "'#{tok}'"
+      @is_comma = false
+    elsif @is_index && @is_comma
+      @fclass.index_name = "'#{tok}'"
+      @is_new_index = true
+      @is_comma = false
+    end
+    add_tok tok
+  end
+
+  def on_comma(tok, f)
+    @is_comma = true
+    @is_index = true
     add_tok tok
   end
 

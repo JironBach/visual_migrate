@@ -138,8 +138,11 @@ module MigrationDefs
       when 'change_column_default'
         return ChangeColumnDefaultFunc.new(func_name)
       when 'add_index'
+        return AddIndexFunc.new(func_name)
       when 'rename_index'
+        return RenameIndexFunc.new(func_name)
       when 'remove_index'
+        return RemoveIndexFunc.new(func_name)
       when 'add_timestamps'
       when 'remove_timestamps'
       else
@@ -459,6 +462,141 @@ module MigrationDefs
 
     def get_str
       "change_column_default :#{@name}" + (@column_name.blank? ? '' : ", :#{@column_name}") + (@default.blank? ? '' : ", #{@default}") + "\n"
+    end
+  end
+
+  class IndexOption < AbstractMigrationClass
+    attr_accessor :name, :unique, :length
+
+    Description = {
+      'name' => 'インデックスの名前',
+      'unique' => 'ユニークなインデックス',
+      'length' => 'インデックスに含まれるカラムの長さ',
+    }
+
+    def initialize(name = "''", unique = nil, length = nil)
+      @name = name
+      @unique = unique
+      @length = length
+    end
+
+    def set_option(key, val)
+      case key
+      when 'name'
+        @name = val
+      when 'unique'
+        @unique = (val == 'true')
+      when 'length'
+        @length = !val.blank? ? val.to_i : nil
+      end
+    end
+
+    def get_str
+      result = ''
+      result += ", :name => #{@name}" if !@name.nil? && !@name.blank?
+      result += ", :unique => #{@unique.to_s}" if !@unique.nil?
+      result += ", :length => #{@length.to_s}" if !@length.nil?
+      result
+    end
+  end
+
+  class AddIndexFunc < AbstractMigrationClass
+    attr_accessor :name, :columns, :option
+
+    def initialize(name)
+      @name = name
+      @columns = '[]'
+      @option = IndexOption.new
+    end
+
+    def set_columns(val)
+      @columns = val
+    end
+
+    def parse_from_params(parse_params)
+      @columns = set_columns(parse_params[:columns])
+      @option.set_option 'name', parse_params[:index_name]
+      @option.set_option 'unique', parse_params[:unique]
+      @option.set_option 'length', parse_params[:length]
+    end
+
+    def get_str
+      result = 'add_index '
+      result += " :#{@name}" if !@name.nil? && !@name.blank?
+      result += ", #{@columns}" if !@columns.nil? && !@columns.blank?
+      result += " #{@option.get_str}"
+      result += "\n"
+      result
+    end
+  end
+
+  class RemoveIndexOption < AbstractMigrationClass
+    attr_accessor :name, :column
+
+    Description = {
+      'name' => 'インデックスの名前',
+      'column' => 'カラム',
+    }
+
+    def initialize(name = "''", column = "[]")
+      @name = name
+      @column = column
+    end
+
+    def set_option(key, val)
+      case key
+      when 'name'
+        @name = val
+      when 'column'
+        @column = val
+      end
+    end
+
+    def get_str
+      result = ''
+      result += ", :name => #{@name}" if !@name.nil? && !@name.blank?
+      result += ", :column => #{@column}" if !@column.nil? && !@column.blank?
+      result
+    end
+  end
+
+  class RemoveIndexFunc < AbstractMigrationClass
+    attr_accessor :name, :option
+
+    def initialize(name)
+      @name = name
+      @option = RemoveIndexOption.new
+    end
+
+    def parse_from_params(parse_params)
+      @option.set_option 'name', parse_params[:index_name]
+      @option.set_option 'column', parse_params[:columns]
+    end
+
+    def get_str
+      return "remove_index :#{@name} #{@option.get_str}\n"
+    end
+  end
+
+  class RenameIndexFunc < AbstractMigrationClass
+    attr_accessor :name, :index_name, :new_index_name
+
+    def initialize(name)
+      @name = name
+      @index_name = "''"
+      @new_index_name = "''"
+    end
+
+    def parse_from_params(parse_params)
+      @index_name = parse_params[:index_name]
+      @new_index_name = parse_params[:new_index_name]
+    end
+
+    def get_str
+      result = "rename_index :#{@name}"
+      result += ", #{@index_name}" if !@index_name.nil? && !@index_name.blank?
+      result += ", #{@new_index_name}" if !@new_index_name.nil? && !@new_index_name.blank?
+      result += "\n"
     end
   end
 
