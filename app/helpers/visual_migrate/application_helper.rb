@@ -88,7 +88,7 @@ module VisualMigrate
       render partial: "layouts/visual_migrate/columns"
     end
 
-    def type_select(id, select)
+    def type_select(id, select = nil)
       select_tag(id, options_for_select(MigrationDefs::ColumnType.keys, select))
     end
 
