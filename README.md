@@ -4,15 +4,18 @@ visual_migrate brings a easy way to edit migration files for Ruby on Rails.
 
 ### Install
 * Add
+``
+    group :development do  
+      gem "ruby_parser"  
+      gem "file-tail"  
+      gem "sourcify"  
+      gem "ruby2ruby"  
+      gem 'jquery-ui-rails'  
+      gem "systemu"  
+      gem 'visual_migrate', :git => 'git://github.com/JironBach/visual_migrate.git'  
+    end  
+``
     group :development do
-      gem "ruby_parser"
-      gem "file-tail"
-      gem "sourcify"
-      gem "ruby2ruby"
-      gem 'jquery-ui-rails'
-      gem "systemu"
-      gem 'visual_migrate', :git => 'git://github.com/JironBach/visual_migrate.git'
-    end
   to Gemfile.
 * If you use MySQL, add `gem "mysql2", "0.3.12"` to Gemfile. Currentlly version supports under 0.3.12. 
 * Add `mount VisualMigrate::Engine => "/visual_migrate" if ENV[RAILS_ENV] != 'production'` to config/routes.rb.
