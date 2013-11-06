@@ -94,7 +94,6 @@ module VisualMigrate
           end
         end
       end
-      logger.debug '-----' + migration_class.get_str.inspect
       parsed_migration = RubyParser.new.parse(migration_class.get_str)
       @context = Ruby2Ruby.new.process(parsed_migration)#migration_class.get_str#params[:new_func].inspect#
 
@@ -145,7 +144,7 @@ module VisualMigrate
 
     def run_command
       command = params[:command_line]
-      if ((command =~ /^rake .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)) && (command !~ /;/)
+      if ((command =~ /^rake .*/) || (command =~ /^bundle .*/) || (command =~ /^rails .*/) || (command =~ /^git .*/)) && (command !~ /;/)
         #begin
           status, stdout, stderr = systemu command
           if stderr.blank?
@@ -158,7 +157,7 @@ module VisualMigrate
         #  @run_result = '<font color="red">failed</font>'
         #end
       else
-        @run_result = '<font color="red">available commands are "rake", "rails" and "git".</font>'
+        @run_result = '<font color="red">available commands are "rake", "bundle", "rails" and "git".</font>'
       end
 
       command_line
