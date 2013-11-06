@@ -37,13 +37,19 @@ class MethodFilter < Ripper::Filter
       @is_func = false
     end
 
+    if tok == 'do'
+      if !@is_do
+        @is_do = true
+      end
+    end
+
     if tok == 'end'
       if @is_do
+        add_tok tok
         @is_do = false
-        add_tok tok
       elsif @is_func
-        @is_func = false
         add_tok tok
+        @is_func = false
       elsif @is_method
         index = 0
         @mclass.funcs.each do |func|
@@ -73,16 +79,8 @@ class MethodFilter < Ripper::Filter
   end
 
   def on_nl(tok, f)
-    @is_func = false if !@is_func
-  end
-
-  def on_do_block(tok, f)
-    if !@is_func
-      @is_func = true
-    elsif !@is_do
-      @is_do = true
-    end
-    add_tok tok
+    @is_func = false if !@is_do
+    Rails.logger.debug "on_nl2-----#{@is_do.inspect} / #{@is_func.to_s} / #{@is_method.to_s}-----"
   end
 
   def on_lbrase(tok, f)

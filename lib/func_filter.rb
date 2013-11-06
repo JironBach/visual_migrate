@@ -85,7 +85,6 @@ class CreateTableFuncFilter < Ripper::Filter
   end
 
   def on_ident(tok, f)
-    Rails.logger.debug "-----#{tok}} / #{@is_column.to_s}-----"
     if tok == 't'
       @is_column = true
     elsif @is_column
@@ -99,9 +98,7 @@ class CreateTableFuncFilter < Ripper::Filter
       end
       @is_column = false
     elsif @is_column_type
-      Rails.logger.debug '-----' + @fclass.inspect
       @fclass.add_column(@column_type, tok)
-      Rails.logger.debug @fclass.inspect + '-----'
       @is_column_type = false
       @is_column_option = true
       @column_type = nil

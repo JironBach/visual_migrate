@@ -1,0 +1,21 @@
+<table border="1">
+  <tr>
+    <th>table</th>
+    <th>columns</th>
+  </tr>
+  <tr>
+    <td>
+      <% @tables.each do |t| %>
+        <%= (link_to t, :action => :index, :id => t) + raw('<br />') if t != 'schema_migrations'%><br />
+      <% end %>
+    </td>
+    <td>
+      <% if !@columns.nil? %>
+        <% @columns.each do |c| %>
+          <%= c.to_s %><br />
+        <% end %>
+      <% end %>
+    </td>
+  </tr>
+</table>
+<br />

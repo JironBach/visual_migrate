@@ -32,6 +32,7 @@ module VisualMigrate
     end
 
     def columns_select(column_id, table, select = nil)
+      logger.debug Kernel.const_get(table.singularize.camelize).column_names.inspect + '-----'
       select_tag(column_id, options_for_select(Kernel.const_get(table.singularize.camelize).column_names, select))
     end
 
