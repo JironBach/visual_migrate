@@ -6,6 +6,13 @@ require 'pathname'
 require 'migration_defs'
 require 'class_filter'
 
+require 'ruby_parser'
+require 'file-tail'
+require 'sourcify'
+require 'ruby2ruby'
+require 'jquery-ui-rails'
+require 'systemu'
+
 module VisualMigrate
   include ApplicationHelper
 

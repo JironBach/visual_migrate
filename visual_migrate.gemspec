@@ -25,5 +25,4 @@ Gem::Specification.new do |s|
   s.add_dependency "ruby2ruby"
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency "systemu"
-  s.add_dependency "sqlite3"
 end
