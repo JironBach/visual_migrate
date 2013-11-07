@@ -71,14 +71,18 @@ gem 'devise', branch: 'rails4'
 #gem 'rails_admin', branch: 'rails-4'
 #gem 'activeadmin', github: 'gregbell/active_admin'
 
-group :development do
-  gem 'rspec-rails', '2.14.0'
+group :development, :test do
+  gem "visual_migrate", :git => "git://github.com/JironBach/visual_migrate.git"
+  gem "minitest-rails"
 end
 
 group :test do
-  #gem 'rspec', '2.14.0'
-  gem 'selenium-webdriver', '2.0'
-  gem 'capybara', '~> 2.0.0'
+  #gem 'selenium-webdriver', '~> 2.35.1'
+  #gem "zip-zip" and gem "rubyzip", "~> 1.0.0"
+  #gem 'rubyzip', '< 1.0.0', :require => 'zip/zip'
   gem 'factory_girl'
+  gem 'minitest-rails-capybara'
+  gem 'minitest-colorize'
+  gem 'minitest-focus'
 end
 
