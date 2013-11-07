@@ -5,14 +5,14 @@ visual_migrate brings a easy way to edit migration files for Ruby on Rails.
 ### Install ###
 * Add
 ```
-group :development do
-    gem "ruby_parser"
-    gem "file-tail"
-    gem "sourcify"
-    gem "ruby2ruby"
-    gem "jquery-ui-rails"
-    gem "systemu"
-    gem "visual_migrate", :git => "git://github.com/JironBach/visual_migrate.git"
+group :development do  
+    gem "ruby_parser"  
+    gem "file-tail"  
+    gem "sourcify"  
+    gem "ruby2ruby"  
+    gem "jquery-ui-rails"  
+    gem "systemu"  
+    gem "visual_migrate", :git => "git://github.com/JironBach/visual_migrate.git"  
 end
 ```
   to Gemfile.
@@ -35,7 +35,7 @@ rake db:migrate
 * RoR 4.0.
 * mysql2 gem `'0.3.12'`.
 
-### <font color="red">Attention!</font> ###
+### 'Attention!' ###
 * The applicatoins which loading visual_migrate are allow pending migrations also in development enviroment.
 * Current Version require mysql2 gem version `0.3.12`. Don't use with version 0.3.13.
 * Current Version clear session when run command. So session like login will be cancelled.
