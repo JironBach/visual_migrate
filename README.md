@@ -35,7 +35,7 @@ rake db:migrate
 * RoR 4.0.
 * mysql2 gem `'0.3.12'`.
 
-### “Attention!” ###
+### 'Attention!' ###
 * The applicatoins which loading visual_migrate are allow pending migrations also in development enviroment.
 * Current Version require mysql2 gem version `0.3.12`. Don't use with version 0.3.13.
 * Current Version clear session when run command. So session like login will be cancelled.
