@@ -82,3 +82,14 @@ gem 'devise', branch: 'rails4'
 #  gem 'visual_migrate', :git => 'git://github.com/JironBach/visual_migrate.git'
 #end
 
+group :development do
+  gem 'rspec-rails', '2.14.0'
+end
+
+group :test do
+  #gem 'rspec', '2.14.0'
+  gem 'selenium-webdriver', '2.0'
+  gem 'capybara', '~> 2.0.0'
+  gem 'factory_girl'
+end
+

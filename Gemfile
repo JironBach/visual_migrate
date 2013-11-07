@@ -16,18 +16,26 @@ gem "jquery-rails"
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
+gem 'rails', '~> 4.0.0'
+
 gem "ruby_parser"
 gem "file-tail"
 gem "sourcify"
 gem "ruby2ruby"
 gem 'jquery-ui-rails'
+gem "systemu"
 
 gem 'sqlite3'
 gem "mysql2", "0.3.12"
 gem "ruby-mysql"
 gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"
-gem "systemu"
 
-gem 'rails', '~> 4.0.0'
+group :development do
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'rspec'
+end
 
