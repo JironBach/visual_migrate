@@ -31,14 +31,3 @@ gem "ruby-mysql"
 gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"
 
-group :development, :test do
-  gem "minitest-rails"
-end
-
-group :test do
-  gem 'factory_girl'
-  gem 'minitest-rails-capybara'
-  gem 'minitest-colorize'
-  gem 'minitest-focus'
-end
-
