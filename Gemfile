@@ -17,6 +17,7 @@ gem "jquery-rails"
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 gem 'rails', '~> 4.0.0'
+gem 'jeweler'
 
 gem "ruby_parser"
 gem "file-tail"
