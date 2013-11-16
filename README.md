@@ -19,8 +19,8 @@ group :development do
 end
 ```
   to Gemfile.
-* If you use MySQL, add `gem "mysql2", "0.3.12"` to Gemfile. Currentlly version supports under 0.3.12. 
-* Add `mount VisualMigrate::Engine => "/visual_migrate" if ENV[RAILS_ENV] != 'production'` to config/routes.rb.
+* If you use MySQL, add `gem "mysql2", "~> 0.3.14"` to Gemfile. Currentlly version doesn't support 0.3.13. 
+* Add `mount VisualMigrate::Engine => "/visual_migrate" if ENV['RAILS_ENV'] != 'production'` to config/routes.rb.
 * If schema_migrations is not exists in database, then do rake to create schema_migrations.
 
 ```bash
@@ -37,17 +37,16 @@ rake db:migrate
 ### System requirement ###
 * Ruby 2.0 or later.
 * RoR 4.0 or later.
-* mysql2 gem `'0.3.12'`.
+* mysql2 gem `'0.3.14'` or later.
 
 ### **_Attention!_** ###
 * The applicatoins which loading visual_migrate are allow pending migrations also in development enviroment.
-* Current Version require mysql2 gem version `0.3.12`. Don't use with version 0.3.13.
+* Current Version require mysql2 gem version `0.3.14` or later. Don't use with version 0.3.13.
 * Current Version clear session when run command. So session like login will be cancelled.
 
 ### In the Future ###
 * Select session variables to clear when run command.
-* mysql2 version 0.3.13 or later.
-* Ruby 1.3?
+* Ruby 1.9?
 * RoR 3.2?
  
 License

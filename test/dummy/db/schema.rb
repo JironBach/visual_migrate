@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131105042853) do
+ActiveRecord::Schema.define(version: 20131007030825) do
 
   create_table "test_tables", force: true do |t|
-    t.string  "title",      limit: 64,  default: "abc", null: false
-    t.text    "contents"
-    t.text    "tmp_str",    limit: 255,                 null: false
-    t.integer "test_int",               default: 100
-    t.float   "test_float",             default: 3.14
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "title",      limit: 64, default: "abc", null: false
+    t.text     "contents"
+    t.string   "test_str",   limit: 16, default: "xyz"
+    t.integer  "test_int",              default: 100
+    t.float    "test_float",            default: 3.14
   end
-
-  add_index "test_tables", ["title", "test_int"], name: "idx"
 
 end
