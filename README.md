@@ -1,4 +1,4 @@
-# visual_migrate #
+# VisualMigrate #
 ## migrate plugin for Ruby on Rails ##
 visual_migrate brings a easy way to edit migration files for Ruby on Rails.
 
