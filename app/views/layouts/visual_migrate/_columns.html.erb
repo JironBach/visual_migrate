@@ -1,4 +1,4 @@
-<table id=_columns_<%= @migration_method.name %>_<%= @migration_func.name %> border="0" style="margin-left:2em;">
+<table id="<%= "_columns_#{@migration_method.name}_#{@migration_func.name}" %>" border="0" style="margin-left:2em;">
   <tr>
     <th>delete</th>
     <th>Type</th>
@@ -9,18 +9,18 @@
   </tr>
   <% @columns.each do |col| %>
     <tr>
-      <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
-      <td><%= type_select '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][type]', col.type %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][name]', col.name, :readonly => true %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][limit]', col.option.limit if !col.option.nil? %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][default]', col.option.default if !col.option.nil? %></td>
-      <td><%= check_box_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][null]', true, col.option.null if !col.option.nil? %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][precision]', col.option.precision if !col.option.nil? %></td>
-      <td><%= text_field_tag '[methods][' + @migration_method.name + '][funcs][][columns][' + (col.name.blank? ? 'timestamps' : col.name) + '][scale]', col.option.scale if !col.option.nil? %></td>
+      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
+      <td><%= type_select "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][type]', col.type %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][name]', col.name, :readonly => true %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][limit]', col.option.limit if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][default]', col.option.default if !col.option.nil? %></td>
+      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][null]', true, col.option.null if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][precision]', col.option.precision if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][scale]', col.option.scale if !col.option.nil? %></td>
     </tr>
   <% end %>
 </table>
-　　<input onclick="<%= "deleteTableRow(\"_columns_" + @migration_method.name + '_");' %>" type="button" value="delete_column">
+　　<input onclick="<%= "deleteTableRow('_columns_#{@migration_method.name}_#{@migration_func.name}')" %>" type="button" value="delete_column">
   <br /><br />
   <table id=[new_column][<%= @migration_method.name %>][table] border="0" style="margin-left:2em;">
     <tr>
@@ -31,16 +31,16 @@
       <% end %>
     </tr>
     <tr>
-      <td><%= type_select '[new_column][' + @migration_method.name + '][][type]' %></td>
-      <td><%= text_field_tag '[new_column][' + @migration_method.name + '][][name]' %></td>
-      <td><%= text_field_tag '[new_column][' + @migration_method.name + '][][limit]' %></td>
-      <td><%= text_field_tag '[new_column][' + @migration_method.name + '][][default]', "''" %></td>
-      <td><%= check_box_tag '[new_column][' + @migration_method.name + '][][null]', true, true %></td>
-      <td><%= text_field_tag '[new_column][' + @migration_method.name + '][][precision]' %></td>
-      <td><%= text_field_tag '[new_column][' + @migration_method.name + '][][scale]' %></td>
+      <td><%= type_select "[new_column][#{@migration_method.name}][#{@migration_func.name}][type]" %></td>
+      <td><%= text_field_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][name]" %></td>
+      <td><%= text_field_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][limit]" %></td>
+      <td><%= text_field_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][default]", "''" %></td>
+      <td><%= check_box_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][null]", true, true %></td>
+      <td><%= text_field_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][precision]" %></td>
+      <td><%= text_field_tag "[new_column][#{@migration_method.name}][#{@migration_func.name}][scale]" %></td>
     </tr>
   </table>
-　　<input onclick="<%= "addColumn_" + @migration_method.name + '_' + @migration_func.name  + '("_columns_' + @migration_method.name + '_");' %>" type="button" value="add_column">
+　　<input onclick="<%= "addColumn_#{@migration_method.name}_#{@migration_func.name}('_columns_#{@migration_method.name}_#{@migration_func.name}');" %>" type="button" value="add_column">
 　　<%#= button_to_function :add_column, 'addColumn_' + @migration_method.name + '_("_columns_' + @migration_method.name + '_");' %>
 
 <script type="text/javascript">
