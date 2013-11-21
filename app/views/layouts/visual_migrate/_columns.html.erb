@@ -9,18 +9,18 @@
   </tr>
   <% @columns.each do |col| %>
     <tr>
-      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
-      <td><%= type_select "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][type]', col.type %></td>
-      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][name]', col.name, :readonly => true %></td>
-      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][limit]', col.option.limit if !col.option.nil? %></td>
-      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][default]', col.option.default if !col.option.nil? %></td>
-      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][null]', true, col.option.null if !col.option.nil? %></td>
-      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][precision]', col.option.precision if !col.option.nil? %></td>
-      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][#{@migration_func.name}][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][scale]', col.option.scale if !col.option.nil? %></td>
+      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][delete]', true, false %></td>
+      <td><%= type_select "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][type]', col.type %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][name]', col.name, :readonly => true %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][limit]', col.option.limit if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][default]', col.option.default if !col.option.nil? %></td>
+      <td><%= check_box_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][null]', true, col.option.null if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][precision]', col.option.precision if !col.option.nil? %></td>
+      <td><%= text_field_tag "[methods][#{@migration_method.name}][funcs][][columns][" + (col.name.blank? ? 'timestamps' : col.name) + '][scale]', col.option.scale if !col.option.nil? %></td>
     </tr>
   <% end %>
 </table>
-　　<input onclick="<%= "deleteTableRow('_columns_#{@migration_method.name}_#{@migration_func.name}')" %>" type="button" value="delete_column">
+　　<input onclick="<%= "deleteTableRow(\"_columns_#{@migration_method.name}_#{@migration_func.name}\")" %>" type="button" value="delete_column">
   <br /><br />
   <table id=[new_column][<%= @migration_method.name %>][table] border="0" style="margin-left:2em;">
     <tr>
@@ -44,20 +44,19 @@
 　　<%#= button_to_function :add_column, 'addColumn_' + @migration_method.name + '_("_columns_' + @migration_method.name + '_");' %>
 
 <script type="text/javascript">
-  function addColumn_<%= @migration_method.name + '_' + @migration_func.name %>(tableID) {
-      if((document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_type").value != "timestamps") && 
-         (document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value == "")) {
+  function addColumn_<%="#{@migration_method.name}_#{@migration_func.name}" %>(tableID) {
+      if((document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_type" %>").value != "timestamps") && (document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_name" %>").value == "")) {
         alert("Input column name.");
         return;
       }
 
       var column_name = "timestamps";
-      if(document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_type").value != "timestamps") {
-        column_name = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value
+      if(document.getElementById('<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_type" %>').value != "timestamps") {
+        column_name = document.getElementById('<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_name" %>').value;
       }
-        
+
       var table = document.getElementById(tableID);
-      var newTable = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_table");
+      var newTable = document.getElementById('<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_table" %>');
 
       var rowCount = table.rows.length;
       var row = table.insertRow(rowCount);
@@ -65,12 +64,12 @@
       var cell0 = row.insertCell(0);
       var element0 = document.createElement("input");
       element0.type = "checkbox";
-      element0.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][delete]";
+      element0.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][delete]";
       cell0.appendChild(element0);
 
       var cell1 = row.insertCell(1);
       var element1 = document.createElement("select");
-      element1.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][type]";
+      element1.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][type]";
       <% keys = MigrationDefs::ColumnType.keys.reverse#Why??? %>
       var i = <%= keys.count-1 %>;
       var selectedIndex = 0;
@@ -79,7 +78,7 @@
         option_<%= ct %>.text = "<%= ct %>";
         option_<%= ct %>.value = "<%= ct %>";
         element1.options.add(option_<%= ct %>, "<%= ct %>");
-        if("<%= ct %>" == document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_type").value) selectedIndex = i;
+        if("<%= ct %>" == document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_type" %>").value) selectedIndex = i;
         i--;
       <% end %>
       element1.options.selectedIndex = selectedIndex;
@@ -88,45 +87,45 @@
       var cell2 = row.insertCell(2);
       var element2 = document.createElement("input");
       element2.type = "text";
-      element2.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][name]";
-      element2.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value;
+      element2.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][name]";
+      element2.value = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_name" %>").value;
       element2.readOnly = true;
       cell2.appendChild(element2);
-      document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_name").value = "";
+      document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_name" %>").value = "";
 
       var cell3 = row.insertCell(3);
       var element3 = document.createElement("input");
       element3.type = "text";
-      element3.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][limit]";
-      element3.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_limit").value;
+      element3.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][limit]";
+      element3.value = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_limit" %>").value;
       cell3.appendChild(element3);
 
       var cell4 = row.insertCell(4);
       var element4 = document.createElement("input");
       element4.type = "text";
-      element4.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][default]";
-      element4.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_default").value;
+      element4.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][default]";
+      element4.value = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_default" %>").value;
       cell4.appendChild(element4);
 
       var cell5 = row.insertCell(5);
       var element5 = document.createElement("input");
       element5.type = "checkbox";
-      element5.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][null]";
-      element5.checked = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_null").checked;
+      element5.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][null]";
+      element5.checked = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_null" %>").checked;
       cell5.appendChild(element5);
 
       var cell6 = row.insertCell(6);
       var element6 = document.createElement("input");
       element6.type = "text";
-      element6.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][precision]";
-      element6.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_precision").value;
+      element6.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][precision]";
+      element6.value = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_precision" %>").value;
       cell6.appendChild(element6);
 
       var cell7 = row.insertCell(7);
       var element7 = document.createElement("input");
       element7.type = "text";
-      element7.name = "[methods][<%= @migration_method.name %>][funcs][<%= @migration_func.name %>][columns][" + column_name + "][scale]";
-      element7.value = document.getElementById("_new_column_<%= @migration_method.name %>_<%= @migration_func.name %>_scale").value;
+      element7.name = "[methods][<%= @migration_method.name %>][funcs][][columns][" + column_name + "][scale]";
+      element7.value = document.getElementById("<%= "_new_column_#{@migration_method.name}_#{@migration_func.name}_scale" %>").value;
       cell7.appendChild(element7);
 
   }
