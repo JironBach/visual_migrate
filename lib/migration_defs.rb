@@ -36,6 +36,7 @@ module MigrationDefs
     'boolean' => 'Boolean型',
     'timestamps' => 'レコードの作成・更新日時',
     'attachment' => 'attachment',
+    'belongs_to' => 'belongs_to',
   }
 
   class MigrationClass
@@ -211,7 +212,7 @@ module MigrationDefs
 
     def get_str(prefix = 't.')
       result = prefix + @type
-      result += " :#{@name}" if (@type != 'timestamps') && (@type != 'attachment')
+      result += " :#{@name}" if (@type != 'timestamps') && (@type != 'attachment') && (@type != 'belongs_to')
       result += @option.get_str
     end
   end
@@ -285,7 +286,7 @@ module MigrationDefs
       parse_params[:columns].each do |key, val|
         next if val.nil?
 
-        if (val[:type] != 'timestamps') && (val[:type] != 'attachment')
+        if (val[:type] != 'timestamps') && (val[:type] != 'attachment') && (val[:type] != 'belongs_to')
           c = add_column(val[:type], val[:name])
           c.set_option 'limit', val[:limit]
           c.set_option 'default', val[:default]
@@ -357,7 +358,7 @@ module MigrationDefs
     end
 
     def parse_from_params(parse_params)
-      if (parse_params[:type] != 'timestamps') && (parse_params[:type] != 'attachment')
+      if (parse_params[:type] != 'timestamps') && (parse_params[:type] != 'attachment') && (parse_params[:type] != 'belongs_to')
         @column = add_column(parse_params[:type], parse_params[:column])
         @column.set_option 'limit', parse_params[:limit]
         @column.set_option 'default', parse_params[:default]
@@ -373,7 +374,7 @@ module MigrationDefs
       if @column.nil?
           return "add_column :#{@name}\n"
       else
-        if (@column.type != 'timestamps') && (@column.type != 'attachment')
+        if (@column.type != 'timestamps') && (@column.type != 'attachment') && (@column.type != 'belongs_to')
           return "add_column :#{@name}" + (@column.name.blank? ? "\n" : ", :#{@column.name}, :#{@column.type}#{@column.option.get_str}\n")
         else
           return "add_column :#{@name}, #{:@column.type}\n"
@@ -432,7 +433,7 @@ module MigrationDefs
       if @column.nil?
           return "change_column :#{@name}\n"
       else
-        if (@column.type != 'timestamps') && (@column.type != 'attachment')
+        if (@column.type != 'timestamps') && (@column.type != 'attachment') && (@column.type != 'belongs_to')
           return "change_column :#{@name}" + (@column.name.blank? ? "\n" : ", :#{@column.name}, :#{@column.type}#{@column.option.get_str}\n")
         else
           return "change_column :#{@name}, #{:@column.type}\n"
