@@ -16,7 +16,7 @@ gem "jquery-rails"
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 4.1.0'
 gem 'jeweler'
 
 gem "ruby_parser"
@@ -27,7 +27,7 @@ gem 'jquery-ui-rails'
 gem "systemu"
 
 gem 'sqlite3'
-gem "mysql2", "0.3.12"
+gem "mysql2"#, "0.3.12"
 gem "ruby-mysql"
 gem "pg", "~> 0.9.0", :require => 'pg'
 gem "postgres-pr"

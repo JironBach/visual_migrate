@@ -10,7 +10,7 @@ module MigrationDefs
       #'change_table' => 'テーブル定義を変更',#not support
       'add_column' => 'カラムの追加',
       'rename_column' => 'カラム名の変更',
-      'change_column' => 'カラムの変更カラムの変更',
+      'change_column' => 'カラムの変更',
       'remove_column' => 'カラムの削除',
       #'remove_columns' => '複数のカラムを削除',#not support
       'change_column_default' => 'カラムの初期値を設定',
@@ -165,7 +165,7 @@ module MigrationDefs
       'scale' => '小数点以下の桁数',
     }
 
-    def initialize(limit = nil, default = nil, is_null = true, precision = nil, scale = nil)
+    def initialize(limit = nil, default = nil, is_null = false, precision = nil, scale = nil)
       @limit = limit
       @default = default
       @null	= is_null
@@ -177,7 +177,7 @@ module MigrationDefs
       result = ''
       result += ", :limit => #{@limit.to_s}" if !@limit.blank? && @limit != 0
       result += ", :default => #{@default.to_s}" if !@default.blank?
-      result += ", :null => #{false.to_s}" if !@null
+      result += ", :null => #{@null.to_s}" if !@null.blank?
       result += ", :precision => #{@precision.to_s}" if !@precision.nil? && @precision != 0
       result += ", :scale => #{@scale.to_s}" if !@scale.nil? && @scale != 0
       result

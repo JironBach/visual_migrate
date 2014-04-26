@@ -1,3 +1,3 @@
 module VisualMigrate
-  VERSION = "4.0.2.0"
+  VERSION = "4.1.0.0"
 end
